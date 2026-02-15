@@ -30,6 +30,10 @@
   font-size: 1.5rem;
 }
 
+.logo-highlight {
+  color: var(--blue-600);
+}
+
 .header-nav {
   display: flex;
   align-items: center;

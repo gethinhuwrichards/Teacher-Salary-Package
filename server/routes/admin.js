@@ -60,6 +60,34 @@ router.get('/submissions', adminAuth, async (req, res) => {
   }
 });
 
+// PATCH /api/admin/submissions/bulk-status — move approved submissions to pending or denied
+router.patch('/submissions/bulk-status', adminAuth, async (req, res) => {
+  try {
+    const { ids, status } = req.body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: 'ids array required' });
+    }
+    if (!['pending', 'denied'].includes(status)) {
+      return res.status(400).json({ error: 'status must be pending or denied' });
+    }
+
+    const { error } = await supabase
+      .from('submissions')
+      .update({
+        status,
+        reviewed_at: status === 'denied' ? new Date().toISOString() : null,
+      })
+      .in('id', ids);
+
+    if (error) throw error;
+    res.json({ message: `${ids.length} submission(s) moved to ${status}` });
+  } catch (err) {
+    console.error('Error bulk updating submissions:', err);
+    res.status(500).json({ error: 'Failed to update submissions' });
+  }
+});
+
 // PATCH /api/admin/submissions/:id — approve or deny
 router.patch('/submissions/:id', adminAuth, async (req, res) => {
   try {
@@ -149,6 +177,30 @@ router.patch('/submissions/:id/restore', adminAuth, async (req, res) => {
   } catch (err) {
     console.error('Error restoring submission:', err);
     res.status(500).json({ error: 'Failed to restore submission' });
+  }
+});
+
+// GET /api/admin/submissions/all — all approved submissions, searchable by school
+router.get('/submissions/all', adminAuth, async (req, res) => {
+  try {
+    const { school_id } = req.query;
+
+    let query = supabase
+      .from('submissions')
+      .select('*, schools(name, countries(name))')
+      .eq('status', 'approved')
+      .order('submitted_at', { ascending: false });
+
+    if (school_id) {
+      query = query.eq('school_id', school_id);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('Error fetching all submissions:', err);
+    res.status(500).json({ error: 'Failed to fetch submissions' });
   }
 });
 

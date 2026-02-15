@@ -106,6 +106,37 @@
   margin: 0 auto;
 }
 
+.help-calc-btn {
+  margin-top: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--blue-600);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.help-calc-btn:hover {
+  text-decoration: underline;
+}
+
+.calc-box {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background: var(--blue-50);
+  border: 1px solid var(--blue-200);
+  border-radius: 8px;
+}
+
+.calc-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
 @media (max-width: 640px) {
   .form-row {
     flex-direction: column;

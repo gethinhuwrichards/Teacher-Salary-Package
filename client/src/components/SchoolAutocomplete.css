@@ -65,8 +65,43 @@
   font-size: 0.9rem;
 }
 
-.not-found-check {
+.cant-find-btn {
   margin-top: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--blue-600);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.cant-find-btn:hover {
+  text-decoration: underline;
+}
+
+.new-school-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.back-to-search-btn {
+  background: none;
+  border: none;
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  align-self: flex-start;
+}
+
+.back-to-search-btn:hover {
+  color: var(--blue-600);
+  text-decoration: underline;
 }
 
 .selected-school {

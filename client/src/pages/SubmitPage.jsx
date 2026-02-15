@@ -28,6 +28,10 @@ export default function SubmitPage() {
   const [medicalInsurance, setMedicalInsurance] = useState(false);
   const [medicalInsuranceDetail, setMedicalInsuranceDetail] = useState('');
 
+  const [showGrossCalc, setShowGrossCalc] = useState(false);
+  const [grossMonthly, setGrossMonthly] = useState('');
+  const [grossMonths, setGrossMonths] = useState('');
+
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -76,6 +80,10 @@ export default function SubmitPage() {
     }
     if (!position || !grossPay || !grossCurrency || !accommodationType) {
       setError('Please fill in all required fields.');
+      return;
+    }
+    if (accommodationType === 'allowance' && !accommodationAllowance) {
+      setError('Please enter the accommodation allowance amount.');
       return;
     }
 
@@ -204,6 +212,56 @@ export default function SubmitPage() {
               </select>
             </div>
           </div>
+          {!showGrossCalc ? (
+            <button type="button" className="help-calc-btn" onClick={() => setShowGrossCalc(true)}>
+              Help calculating
+            </button>
+          ) : (
+            <div className="calc-box">
+              <div className="form-row">
+                <div className="form-group flex-grow">
+                  <label className="form-label">Total pay per month</label>
+                  <input
+                    type="number"
+                    className="form-input"
+                    placeholder="e.g. 3750"
+                    value={grossMonthly}
+                    onChange={(e) => setGrossMonthly(e.target.value)}
+                  />
+                </div>
+                <div className="form-group" style={{ minWidth: '140px' }}>
+                  <label className="form-label">How many months?</label>
+                  <input
+                    type="number"
+                    className="form-input"
+                    placeholder="e.g. 12"
+                    min="1"
+                    max="99"
+                    value={grossMonths}
+                    onChange={(e) => {
+                      const v = e.target.value.slice(0, 2);
+                      setGrossMonths(v);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="calc-actions">
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  disabled={!grossMonthly || !grossMonths}
+                  onClick={() => {
+                    setGrossPay(String(Math.round(parseFloat(grossMonthly) * parseFloat(grossMonths))));
+                  }}
+                >
+                  Calculate
+                </button>
+                <button type="button" className="back-to-search-btn" onClick={() => setShowGrossCalc(false)}>
+                  Close calculator
+                </button>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Accommodation */}
@@ -221,7 +279,7 @@ export default function SubmitPage() {
           {accommodationType === 'allowance' && (
             <div className="form-row" style={{ marginTop: '0.75rem' }}>
               <div className="form-group flex-grow">
-                <label className="form-label">Allowance Amount</label>
+                <label className="form-label">Allowance Amount (per year)</label>
                 <input
                   type="number"
                   className="form-input"

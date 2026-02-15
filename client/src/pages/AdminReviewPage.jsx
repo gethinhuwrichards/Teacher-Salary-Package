@@ -95,6 +95,7 @@ export default function AdminReviewPage() {
       <div className="admin-header">
         <h1>Review Queue ({submissions.length})</h1>
         <div className="admin-nav">
+          <Link to="/admin/past" className="btn btn-secondary btn-sm">Past Submissions</Link>
           <Link to="/admin/archived" className="btn btn-secondary btn-sm">Archived</Link>
           <button
             className="btn btn-danger btn-sm"

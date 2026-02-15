@@ -60,7 +60,7 @@ CREATE TABLE submissions (
   tax_not_applicable BOOLEAN DEFAULT false,
   pension_offered BOOLEAN,
   pension_percentage NUMERIC(5,2),
-  child_places TEXT CHECK (child_places IN ('0', '1', '2_plus', 'discount')),
+  child_places TEXT CHECK (child_places IN ('0', '1', '2', '2_plus')),
   child_places_detail TEXT,
   medical_insurance BOOLEAN,
   medical_insurance_detail TEXT,

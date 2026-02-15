@@ -81,7 +81,7 @@ export default function SubmissionCard({ submission }) {
           <div className="detail-row">
             <span className="detail-label">Child Places</span>
             <span className="detail-value">
-              {s.child_places === '2_plus' ? '2+' : s.child_places === 'discount' ? 'Discount' : s.child_places}
+              {s.child_places === '2_plus' ? '2+' : s.child_places}
               {s.child_places_detail && ` — ${s.child_places_detail}`}
             </span>
           </div>

@@ -16,8 +16,8 @@ export const ACCOMMODATION_TYPES = [
 export const CHILD_PLACES_OPTIONS = [
   { value: '0', label: '0' },
   { value: '1', label: '1' },
-  { value: '2_plus', label: '2 or more' },
-  { value: 'discount', label: 'Discount' },
+  { value: '2', label: '2' },
+  { value: '2_plus', label: '2+' },
 ];
 
 export const PREFERRED_CURRENCIES = ['USD', 'GBP', 'EUR'];

@@ -6,10 +6,10 @@ export default function HomePage() {
     <div className="home-page">
       <section className="hero">
         <div className="hero-content">
-          <h1>Know Your Worth as an International Teacher</h1>
+          <h1>International School Salaries, Finally Transparent</h1>
           <p className="hero-subtitle">
-            Real salary data from international school teachers worldwide.
-            Anonymous, transparent, and community-driven.
+            Real salary and benefits data shared by international school teachers across the globe.
+            Anonymous, verified, and completely free.
           </p>
           <div className="hero-ctas">
             <Link to="/submit" className="btn btn-primary btn-lg">
@@ -45,7 +45,7 @@ export default function HomePage() {
           <div className="step">
             <div className="step-number">1</div>
             <h3>Submit</h3>
-            <p>Share your salary and package details anonymously. It takes less than 2 minutes.</p>
+            <p>Share your international school salary and package anonymously. It takes less than 2 minutes.</p>
           </div>
           <div className="step">
             <div className="step-number">2</div>
@@ -55,7 +55,7 @@ export default function HomePage() {
           <div className="step">
             <div className="step-number">3</div>
             <h3>Browse</h3>
-            <p>Search by school or country to compare salaries and benefit packages.</p>
+            <p>Search by international school or country to compare salaries and benefit packages.</p>
           </div>
         </div>
       </section>

@@ -9,7 +9,7 @@ export default function CurrencyModal() {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Welcome to TeacherPackage</h2>
+        <h2>Welcome to IntlTeacherPay</h2>
         <p>Select your preferred currency. Salaries will always be shown in both the local school currency and your preferred currency.</p>
         <div className="currency-options">
           <button className="currency-btn" onClick={() => selectCurrency('USD')}>

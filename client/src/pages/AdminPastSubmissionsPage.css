@@ -1,0 +1,192 @@
+.admin-past {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-past .admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-past .admin-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--gray-900);
+}
+
+.past-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.school-filter {
+  position: relative;
+  min-width: 300px;
+  flex: 1;
+  max-width: 400px;
+}
+
+.filter-loader {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: var(--gray-400);
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 50;
+  margin-top: 4px;
+  list-style: none;
+  padding: 4px;
+}
+
+.filter-item {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+.filter-item:hover {
+  background: var(--blue-50);
+}
+
+.filter-country {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+}
+
+.clear-filter-btn {
+  background: none;
+  border: none;
+  color: var(--blue-600);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 0.35rem;
+  font-family: inherit;
+}
+
+.clear-filter-btn:hover {
+  text-decoration: underline;
+}
+
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selected-count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin-right: 0.25rem;
+}
+
+.past-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.past-table th,
+.past-table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.past-table th {
+  background: var(--gray-50);
+  font-weight: 600;
+  color: var(--gray-600);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.past-table th:first-child,
+.past-table td:first-child {
+  width: 36px;
+  text-align: center;
+}
+
+.past-table input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--blue-600);
+  cursor: pointer;
+}
+
+.row-selected {
+  background: var(--blue-50);
+}
+
+.cell-school {
+  font-weight: 500;
+  color: var(--gray-900);
+}
+
+.cell-salary {
+  font-weight: 600;
+  color: var(--gray-800);
+  white-space: nowrap;
+}
+
+.cell-local {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--gray-400);
+}
+
+.cell-date {
+  color: var(--gray-400);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .school-filter {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .past-table {
+    font-size: 0.8rem;
+  }
+
+  .past-table th,
+  .past-table td {
+    padding: 0.5rem;
+  }
+}

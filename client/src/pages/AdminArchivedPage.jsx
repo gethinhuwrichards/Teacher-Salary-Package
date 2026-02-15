@@ -61,6 +61,7 @@ export default function AdminArchivedPage() {
         <h1>Archived Submissions ({submissions.length})</h1>
         <div className="admin-nav">
           <Link to="/admin/review" className="btn btn-primary btn-sm">Review Queue</Link>
+          <Link to="/admin/past" className="btn btn-secondary btn-sm">Past Submissions</Link>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => {

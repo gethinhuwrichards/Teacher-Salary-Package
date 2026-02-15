@@ -64,4 +64,12 @@ export const api = {
     method: 'PATCH',
     body: JSON.stringify({ school_id: schoolId }),
   }),
+  getAllApprovedSubmissions: (schoolId) => {
+    const params = schoolId ? `?school_id=${schoolId}` : '';
+    return request(`/admin/submissions/all${params}`);
+  },
+  bulkUpdateStatus: (ids, status) => request('/admin/submissions/bulk-status', {
+    method: 'PATCH',
+    body: JSON.stringify({ ids, status }),
+  }),
 };

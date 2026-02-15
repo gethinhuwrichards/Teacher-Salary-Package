@@ -24,6 +24,9 @@ export default function AdminLoginPage() {
             <button className="btn btn-secondary" onClick={() => navigate('/admin/archived')}>
               Archived
             </button>
+            <button className="btn btn-secondary" onClick={() => navigate('/admin/past')}>
+              Past Submissions
+            </button>
             <button
               className="btn btn-danger btn-sm"
               onClick={() => {
