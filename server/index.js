@@ -14,6 +14,26 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Health check
+app.get('/api/health', async (req, res) => {
+  const checks = {
+    supabase_url: !!process.env.SUPABASE_URL,
+    supabase_key: !!process.env.SUPABASE_SERVICE_KEY,
+    exchange_key: !!process.env.EXCHANGE_RATE_API_KEY,
+    admin_password: !!process.env.ADMIN_PASSWORD,
+  };
+  try {
+    const supabase = require('./db/supabase');
+    const { error } = await supabase.from('schools').select('id').limit(1);
+    checks.supabase_connected = !error;
+    if (error) checks.supabase_error = error.message;
+  } catch (err) {
+    checks.supabase_connected = false;
+    checks.supabase_error = err.message;
+  }
+  res.json(checks);
+});
+
 app.use('/api/schools', schoolsRoutes);
 app.use('/api/countries', countriesRoutes);
 app.use('/api/submissions', submissionsRoutes);

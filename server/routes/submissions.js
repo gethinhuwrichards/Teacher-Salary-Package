@@ -135,12 +135,7 @@ router.post('/', async (req, res) => {
     res.status(201).json({ message: 'Submission received and pending review', id: data.id });
   } catch (err) {
     console.error('Error creating submission:', err);
-    const message = err.message || 'Failed to submit';
-    // Surface currency/config errors to help debug; keep DB errors generic
-    if (message.includes('EXCHANGE_RATE') || message.includes('Exchange rate') || message.includes('Unknown currency')) {
-      return res.status(500).json({ error: message });
-    }
-    res.status(500).json({ error: 'Failed to submit. Please try again later.' });
+    res.status(500).json({ error: err.message || 'Failed to submit' });
   }
 });
 
