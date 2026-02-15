@@ -1,0 +1,92 @@
+.school-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.back-link {
+  color: var(--blue-600);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.school-header {
+  margin: 1.5rem 0;
+}
+
+.school-header h1 {
+  font-size: 2rem;
+  color: var(--gray-900);
+  margin: 0 0 0.25rem;
+}
+
+.school-country {
+  color: var(--gray-400);
+  font-size: 1rem;
+}
+
+.headline-card {
+  background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+  color: var(--white);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.headline-label {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.headline-amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.headline-local {
+  font-size: 1.1rem;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+}
+
+.headline-meta {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: 0.75rem;
+}
+
+.position-group {
+  margin-bottom: 2rem;
+}
+
+.position-heading {
+  font-size: 1.15rem;
+  color: var(--gray-800);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--gray-100);
+}
+
+.submissions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .headline-amount {
+    font-size: 2rem;
+  }
+
+  .submissions-grid {
+    grid-template-columns: 1fr;
+  }
+}

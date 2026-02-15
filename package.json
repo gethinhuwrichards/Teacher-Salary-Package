@@ -1,0 +1,14 @@
+{
+  "name": "teacher-package",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "seed": "cd server && node scripts/seed.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

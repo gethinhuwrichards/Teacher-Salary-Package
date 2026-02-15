@@ -1,0 +1,115 @@
+.browse-page h1 {
+  font-size: 2rem;
+  color: var(--gray-900);
+  margin: 0 0 0.5rem;
+}
+
+.browse-page .page-subtitle {
+  color: var(--gray-500);
+  margin: 0 0 1.5rem;
+}
+
+.browse-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1.25rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 10px;
+  background: var(--white);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.tab-btn.active {
+  border-color: var(--blue-500);
+  color: var(--blue-600);
+  background: var(--blue-50);
+}
+
+.school-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.school-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+}
+
+.school-card:hover {
+  border-color: var(--blue-300);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.school-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--gray-900);
+}
+
+.card-avg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.avg-label {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.avg-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--blue-600);
+}
+
+.avg-local {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+}
+
+.no-avg {
+  font-size: 0.85rem;
+  color: var(--gray-400);
+}
+
+.school-country-tag {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+}
+
+.search-input {
+  font-size: 1.1rem;
+  padding: 0.8rem 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--gray-400);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--gray-400);
+  font-size: 0.95rem;
+}

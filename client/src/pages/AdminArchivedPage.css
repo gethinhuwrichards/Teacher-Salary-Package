@@ -1,0 +1,27 @@
+.admin-archived {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.admin-archived .admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-archived .admin-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--gray-900);
+}
+
+.archived-card {
+  opacity: 0.8;
+}
+
+.archived-card:hover {
+  opacity: 1;
+}
