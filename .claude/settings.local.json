@@ -13,7 +13,12 @@
       "Bash(magick:*)",
       "Bash(where:*)",
       "Bash(python:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(npx vercel logs:*)",
+      "Bash(vercel logs:*)",
+      "Bash(./node_modules/.bin/vercel:*)",
+      "Bash(npm ls:*)",
+      "Bash(ls:*)"
     ]
   }
 }

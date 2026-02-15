@@ -12,7 +12,7 @@ async function getTodayRates() {
   const monthKey = getMonthKey();
 
   // Check cache — one fetch per month
-  const { data: cached } = await supabase
+  const { data: cached, error: cacheError } = await supabase
     .from('exchange_rates')
     .select('rates')
     .eq('base_currency', 'USD')
@@ -21,7 +21,15 @@ async function getTodayRates() {
 
   if (cached) return cached.rates;
 
+  if (cacheError) {
+    console.error('Cache lookup failed:', cacheError.message);
+  }
+
   // No cached rates for this month — fetch from API
+  if (!API_KEY) {
+    throw new Error('EXCHANGE_RATE_API_KEY is not configured');
+  }
+
   const res = await fetch(`${BASE_URL}/latest/USD`);
   if (!res.ok) throw new Error(`Exchange rate API error: ${res.status}`);
 
@@ -31,13 +39,17 @@ async function getTodayRates() {
   const rates = json.conversion_rates;
 
   // Cache with month key — won't be fetched again until next month
-  await supabase
+  const { error: upsertError } = await supabase
     .from('exchange_rates')
     .upsert({
       base_currency: 'USD',
       rate_date: monthKey,
       rates,
     }, { onConflict: 'base_currency,rate_date' });
+
+  if (upsertError) {
+    console.error('Failed to cache rates:', upsertError.message);
+  }
 
   return rates;
 }
