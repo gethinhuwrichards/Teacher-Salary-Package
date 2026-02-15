@@ -1,13 +1,14 @@
 .submission-card {
-  background: var(--white);
+  background: var(--gray-100);
   border: 1px solid var(--gray-200);
   border-radius: 12px;
   padding: 1.25rem;
   transition: box-shadow 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .submission-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .card-header {
@@ -25,8 +26,8 @@
 }
 
 .badge-teacher {
-  background: var(--blue-100);
-  color: var(--blue-700);
+  background: var(--teal-100);
+  color: var(--teal-700);
 }
 
 .badge-middle {
@@ -47,7 +48,7 @@
 .card-salary {
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--gray-100);
+  border-bottom: 1px solid var(--gray-200);
 }
 
 .salary-main {

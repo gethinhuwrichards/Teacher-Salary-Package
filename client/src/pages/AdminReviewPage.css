@@ -1,5 +1,5 @@
 .admin-review {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -23,111 +23,202 @@
   gap: 0.5rem;
 }
 
-.admin-submissions {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.admin-card {
-  background: var(--white);
+/* Table */
+.review-table-wrap {
+  overflow-x: auto;
   border: 1px solid var(--gray-200);
   border-radius: 12px;
-  padding: 1.25rem;
-  position: relative;
+  background: var(--gray-100);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.admin-card.new-school {
-  border-color: var(--red-200);
+.review-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.review-table thead {
+  background: var(--gray-50);
+  position: sticky;
+  top: 0;
+}
+
+.review-table th {
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--gray-200);
+  white-space: nowrap;
+}
+
+.review-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--gray-200);
+  vertical-align: top;
+  color: var(--gray-700);
+}
+
+.review-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.review-table tbody tr:hover {
+  background: var(--gray-50);
+}
+
+/* New school row */
+.new-school-row {
   background: var(--red-50);
 }
 
-.new-school-badge {
-  position: absolute;
-  top: -8px;
-  right: 12px;
-  background: var(--red-600);
-  color: var(--white);
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
+.new-school-row:hover {
+  background: #fef2f2 !important;
 }
 
-.admin-card-header h3 {
-  margin: 0;
-  font-size: 1.05rem;
+/* School column */
+.col-school {
+  min-width: 160px;
+  max-width: 240px;
+}
+
+.school-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.school-name {
+  font-weight: 600;
   color: var(--gray-900);
 }
 
-.card-meta {
-  font-size: 0.8rem;
+.new-badge {
+  display: inline-block;
+  background: var(--red-600);
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.btn-edit-name {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
   color: var(--gray-400);
+  padding: 0 0.15rem;
+  flex-shrink: 0;
+  transition: color 0.2s;
 }
 
-.admin-card-body {
-  margin: 1rem 0;
+.btn-edit-name:hover {
+  color: var(--teal-600);
 }
 
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.75rem;
+/* Edit name inline */
+.edit-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
-.detail-grid .detail-label {
+.edit-name-input {
+  flex: 1;
+  max-width: 180px;
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.8rem !important;
+  height: auto !important;
+}
+
+/* Money columns */
+.col-money {
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+.sub-amount {
   display: block;
   font-size: 0.75rem;
+  font-weight: 400;
   color: var(--gray-400);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.detail-grid .detail-value {
-  display: block;
-  font-weight: 600;
-  color: var(--gray-800);
-  font-size: 0.9rem;
+/* Benefits column */
+.col-benefits {
+  max-width: 200px;
+  font-size: 0.8rem;
+  line-height: 1.4;
 }
 
-.detail-grid .detail-sub {
-  display: block;
+/* Date column */
+.col-date {
+  white-space: nowrap;
   font-size: 0.8rem;
   color: var(--gray-400);
 }
 
-.admin-card-actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+/* Actions column */
+.col-actions {
+  white-space: nowrap;
 }
 
+.col-actions .btn {
+  margin-right: 0.25rem;
+}
+
+.col-actions .btn:last-child {
+  margin-right: 0;
+}
+
+/* Extra-small buttons for table */
+.btn-xs {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+}
+
+/* Match panel inside school cell */
 .match-panel {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
   border-top: 1px solid var(--gray-200);
 }
 
+.match-panel .form-input {
+  height: auto !important;
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
 .match-loading {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--gray-400);
-  margin-left: 0.5rem;
+  margin-left: 0.4rem;
 }
 
 .match-results {
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0 0;
+  margin: 0.35rem 0 0;
 }
 
 .match-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--gray-100);
-  font-size: 0.9rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: 0.8rem;
 }
 
 .match-item:last-child {

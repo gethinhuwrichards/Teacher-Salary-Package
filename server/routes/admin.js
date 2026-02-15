@@ -5,6 +5,12 @@ const supabase = require('../db/supabase');
 const adminAuth = require('../middleware/adminAuth');
 const { normalizeQuery } = require('../services/searchService');
 
+function toTitleCase(str) {
+  return str
+    .toLowerCase()
+    .replace(/(?:^|\s|-)\S/g, (ch) => ch.toUpperCase());
+}
+
 // POST /api/admin/login
 router.post('/login', async (req, res) => {
   try {
@@ -124,7 +130,7 @@ router.patch('/submissions/:id', adminAuth, async (req, res) => {
         const { data: newSchool, error: schoolError } = await supabase
           .from('schools')
           .insert({
-            name: submission.new_school_name,
+            name: toTitleCase(submission.new_school_name),
             name_normalized: normalizeQuery(submission.new_school_name),
             country_id: country.id,
             is_user_submitted: true,
@@ -201,6 +207,29 @@ router.get('/submissions/all', adminAuth, async (req, res) => {
   } catch (err) {
     console.error('Error fetching all submissions:', err);
     res.status(500).json({ error: 'Failed to fetch submissions' });
+  }
+});
+
+// PATCH /api/admin/submissions/:id/edit-school-name — edit new school name before approval
+router.patch('/submissions/:id/edit-school-name', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Name required' });
+    }
+
+    const { error } = await supabase
+      .from('submissions')
+      .update({ new_school_name: name.trim() })
+      .eq('id', id);
+
+    if (error) throw error;
+    res.json({ message: 'School name updated' });
+  } catch (err) {
+    console.error('Error editing school name:', err);
+    res.status(500).json({ error: 'Failed to update school name' });
   }
 });
 

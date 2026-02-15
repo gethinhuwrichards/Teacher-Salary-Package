@@ -30,12 +30,13 @@
 }
 
 .headline-card {
-  background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
-  color: var(--white);
+  background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
+  color: #ffffff;
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
   text-align: center;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.2);
 }
 
 .headline-label {
@@ -72,7 +73,7 @@
   color: var(--gray-800);
   margin: 0 0 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--gray-100);
+  border-bottom: 2px solid var(--gray-200);
 }
 
 .submissions-grid {

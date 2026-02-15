@@ -23,6 +23,7 @@ export default function SubmitPage() {
   const [taxNotApplicable, setTaxNotApplicable] = useState(false);
   const [pensionOffered, setPensionOffered] = useState(false);
   const [pensionPercentage, setPensionPercentage] = useState('');
+  const [childPlacesOffered, setChildPlacesOffered] = useState(false);
   const [childPlaces, setChildPlaces] = useState('');
   const [childPlacesDetail, setChildPlacesDetail] = useState('');
   const [medicalInsurance, setMedicalInsurance] = useState(false);
@@ -31,6 +32,10 @@ export default function SubmitPage() {
   const [showGrossCalc, setShowGrossCalc] = useState(false);
   const [grossMonthly, setGrossMonthly] = useState('');
   const [grossMonths, setGrossMonths] = useState('');
+
+  const [showNetCalc, setShowNetCalc] = useState(false);
+  const [netMonthly, setNetMonthly] = useState('');
+  const [netMonths, setNetMonths] = useState('');
 
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -84,6 +89,10 @@ export default function SubmitPage() {
     }
     if (accommodationType === 'allowance' && !accommodationAllowance) {
       setError('Please enter the accommodation allowance amount.');
+      return;
+    }
+    if (netPay && grossPay && parseFloat(netPay) > parseFloat(grossPay)) {
+      setError('Net pay cannot be greater than gross pay. Net pay should be your take-home amount after tax.');
       return;
     }
 
@@ -146,8 +155,6 @@ export default function SubmitPage() {
     <div className="submit-page">
       <h1>Submit Your Salary</h1>
       <p className="page-subtitle">All submissions are anonymous and reviewed before publishing.</p>
-
-      {error && <div className="error-banner">{error}</div>}
 
       <form onSubmit={handleSubmit} className="submit-form">
         {/* School */}
@@ -318,31 +325,85 @@ export default function SubmitPage() {
           </div>
 
           {!taxNotApplicable && (
-            <div className="form-row">
-              <div className="form-group flex-grow">
-                <label className="form-label">Estimated Net Pay Per Annum</label>
-                <input
-                  type="number"
-                  className="form-input"
-                  placeholder="e.g. 38000"
-                  value={netPay}
-                  onChange={(e) => setNetPay(e.target.value)}
-                />
+            <>
+              <div className="form-row">
+                <div className="form-group flex-grow">
+                  <label className="form-label">Estimated Net Pay Per Annum (after tax)</label>
+                  <input
+                    type="number"
+                    className="form-input"
+                    placeholder="e.g. 38000"
+                    value={netPay}
+                    onChange={(e) => setNetPay(e.target.value)}
+                  />
+                </div>
+                <div className="form-group" style={{ minWidth: '120px' }}>
+                  <label className="form-label">Currency</label>
+                  <select className="form-select" value={netCurrency} onChange={(e) => setNetCurrency(e.target.value)}>
+                    <option value="">Select...</option>
+                    {currencyOptions.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div className="form-group" style={{ minWidth: '120px' }}>
-                <label className="form-label">Currency</label>
-                <select className="form-select" value={netCurrency} onChange={(e) => setNetCurrency(e.target.value)}>
-                  <option value="">Select...</option>
-                  {currencyOptions.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+              {!showNetCalc ? (
+                <button type="button" className="help-calc-btn" onClick={() => setShowNetCalc(true)}>
+                  Help calculating
+                </button>
+              ) : (
+                <div className="calc-box">
+                  <div className="form-row">
+                    <div className="form-group flex-grow">
+                      <label className="form-label">Net pay per month (after tax)</label>
+                      <input
+                        type="number"
+                        className="form-input"
+                        placeholder="e.g. 3000"
+                        value={netMonthly}
+                        onChange={(e) => setNetMonthly(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group" style={{ minWidth: '140px' }}>
+                      <label className="form-label">How many months?</label>
+                      <input
+                        type="number"
+                        className="form-input"
+                        placeholder="e.g. 12"
+                        min="1"
+                        max="99"
+                        value={netMonths}
+                        onChange={(e) => {
+                          const v = e.target.value.slice(0, 2);
+                          setNetMonths(v);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="calc-actions">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      disabled={!netMonthly || !netMonths}
+                      onClick={() => {
+                        setNetPay(String(Math.round(parseFloat(netMonthly) * parseFloat(netMonths))));
+                      }}
+                    >
+                      Calculate
+                    </button>
+                    <button type="button" className="back-to-search-btn" onClick={() => setShowNetCalc(false)}>
+                      Close calculator
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
-          {/* Pension */}
-          <div className="form-group" style={{ marginTop: '1rem' }}>
+          {/* Other Benefits */}
+          <h3 className="benefits-subtitle">Other Benefits</h3>
+
+          <div className="form-group">
             <label className="checkbox-label">
               <input
                 type="checkbox"
@@ -366,38 +427,54 @@ export default function SubmitPage() {
             </div>
           )}
 
-          {/* Child Places */}
-          <div className="form-group" style={{ marginTop: '1rem' }}>
-            <label className="form-label">Places for Children</label>
-            <select className="form-select" value={childPlaces} onChange={(e) => setChildPlaces(e.target.value)}>
-              <option value="">Select...</option>
-              {CHILD_PLACES_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-          {childPlaces && (
-            <div className="form-group">
-              <label className="form-label">Details</label>
+          <div className="form-group">
+            <label className="checkbox-label">
               <input
-                type="text"
-                className="form-input"
-                placeholder="Any additional details..."
-                value={childPlacesDetail}
-                onChange={(e) => setChildPlacesDetail(e.target.value)}
+                type="checkbox"
+                checked={childPlacesOffered}
+                onChange={(e) => {
+                  setChildPlacesOffered(e.target.checked);
+                  if (!e.target.checked) {
+                    setChildPlaces('');
+                    setChildPlacesDetail('');
+                  }
+                }}
               />
-            </div>
+              Places for children
+            </label>
+          </div>
+          {childPlacesOffered && (
+            <>
+              <div className="form-group">
+                <label className="form-label">Number of Places</label>
+                <select className="form-select" value={childPlaces} onChange={(e) => setChildPlaces(e.target.value)} style={{ maxWidth: '200px' }}>
+                  <option value="">Select...</option>
+                  {CHILD_PLACES_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>{o.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Details</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="Any additional details..."
+                  value={childPlacesDetail}
+                  onChange={(e) => setChildPlacesDetail(e.target.value)}
+                />
+              </div>
+            </>
           )}
 
-          {/* Medical Insurance */}
-          <div className="form-group" style={{ marginTop: '1rem' }}>
+          <div className="form-group">
             <label className="checkbox-label">
               <input
                 type="checkbox"
                 checked={medicalInsurance}
                 onChange={(e) => setMedicalInsurance(e.target.checked)}
               />
-              Comprehensive medical insurance included
+              Comprehensive medical insurance
             </label>
           </div>
           {medicalInsurance && (
@@ -413,6 +490,8 @@ export default function SubmitPage() {
             </div>
           )}
         </section>
+
+        {error && <div className="error-banner">{error}</div>}
 
         <button
           type="submit"

@@ -21,6 +21,10 @@ export default function AdminReviewPage() {
   const [matchResults, setMatchResults] = useState([]);
   const [matchSearching, setMatchSearching] = useState(false);
 
+  // Edit school name state
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState('');
+
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (!token) {
@@ -86,6 +90,36 @@ export default function AdminReviewPage() {
     }
   }
 
+  async function handleEditSchoolName(id) {
+    if (!editName.trim()) return;
+    try {
+      await api.editSchoolName(id, editName.trim());
+      setSubmissions(prev =>
+        prev.map(s => s.id === id ? { ...s, new_school_name: editName.trim() } : s)
+      );
+      setEditingId(null);
+      setEditName('');
+    } catch (err) {
+      alert(`Failed to update: ${err.message}`);
+    }
+  }
+
+  function formatAccommodation(sub) {
+    if (sub.accommodation_type === 'allowance') {
+      return `Allowance: ${formatCurrency(sub[`accommodation_${field}`], currency)}`;
+    }
+    return sub.accommodation_type.replace(/_/g, ' ');
+  }
+
+  function formatBenefits(sub) {
+    const parts = [];
+    if (sub.pension_offered) parts.push(sub.pension_percentage ? `Pension ${sub.pension_percentage}%` : 'Pension');
+    if (sub.child_places) parts.push(`Children: ${sub.child_places}${sub.child_places_detail ? ` (${sub.child_places_detail})` : ''}`);
+    if (sub.medical_insurance) parts.push(`Medical${sub.medical_insurance_detail ? ` (${sub.medical_insurance_detail})` : ''}`);
+    if (sub.tax_not_applicable) parts.push('No tax');
+    return parts.length > 0 ? parts.join(', ') : '—';
+  }
+
   if (loading) {
     return <div className="loading">Loading submissions...</div>;
   }
@@ -95,7 +129,7 @@ export default function AdminReviewPage() {
       <div className="admin-header">
         <h1>Review Queue ({submissions.length})</h1>
         <div className="admin-nav">
-          <Link to="/admin/past" className="btn btn-secondary btn-sm">Past Submissions</Link>
+          <Link to="/admin/past" className="btn btn-secondary btn-sm">Accepted Submissions</Link>
           <Link to="/admin/archived" className="btn btn-secondary btn-sm">Archived</Link>
           <button
             className="btn btn-danger btn-sm"
@@ -113,142 +147,133 @@ export default function AdminReviewPage() {
         <div className="empty-state">No pending submissions to review.</div>
       )}
 
-      <div className="admin-submissions">
-        {submissions.map((sub) => {
-          const isNewSchool = !sub.school_id && sub.new_school_name;
-          const isActioning = actionLoading[sub.id];
+      {submissions.length > 0 && (
+        <div className="review-table-wrap">
+          <table className="review-table">
+            <thead>
+              <tr>
+                <th>School</th>
+                <th>Country</th>
+                <th>Position</th>
+                <th>Gross</th>
+                <th>Net</th>
+                <th>Accommodation</th>
+                <th>Benefits</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {submissions.map((sub) => {
+                const isNewSchool = !sub.school_id && sub.new_school_name;
+                const isActioning = actionLoading[sub.id];
+                const schoolName = sub.schools?.name || sub.new_school_name;
+                const country = sub.schools?.countries?.name || sub.new_school_country;
+                const expanded = matchingId === sub.id || editingId === sub.id;
 
-          return (
-            <div
-              key={sub.id}
-              className={`admin-card ${isNewSchool ? 'new-school' : ''}`}
-            >
-              {isNewSchool && <div className="new-school-badge">NEW SCHOOL</div>}
-
-              <div className="admin-card-header">
-                <div>
-                  <h3>
-                    {sub.schools?.name || sub.new_school_name}
-                  </h3>
-                  <span className="card-meta">
-                    {sub.schools?.countries?.name || sub.new_school_country} · {getPositionLabel(sub.position)} · {new Date(sub.submitted_at).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-
-              <div className="admin-card-body">
-                <div className="detail-grid">
-                  <div>
-                    <span className="detail-label">Gross Pay</span>
-                    <span className="detail-value">{formatCurrency(sub[`gross_${field}`], currency)}</span>
-                    {sub.local_currency_code !== currency && (
-                      <span className="detail-sub">{formatCurrency(sub.gross_local, sub.local_currency_code)}</span>
-                    )}
-                  </div>
-
-                  <div>
-                    <span className="detail-label">Accommodation</span>
-                    <span className="detail-value">
-                      {sub.accommodation_type === 'allowance'
-                        ? `Allowance: ${formatCurrency(sub[`accommodation_${field}`], currency)}`
-                        : sub.accommodation_type.replace(/_/g, ' ')}
-                    </span>
-                  </div>
-
-                  {sub.net_pay && (
-                    <div>
-                      <span className="detail-label">Net Pay</span>
-                      <span className="detail-value">{formatCurrency(sub[`net_${field}`], currency)}</span>
-                    </div>
-                  )}
-
-                  {sub.tax_not_applicable && (
-                    <div>
-                      <span className="detail-label">Tax</span>
-                      <span className="detail-value">N/A</span>
-                    </div>
-                  )}
-
-                  {sub.pension_offered && (
-                    <div>
-                      <span className="detail-label">Pension</span>
-                      <span className="detail-value">{sub.pension_percentage ? `${sub.pension_percentage}%` : 'Yes'}</span>
-                    </div>
-                  )}
-
-                  {sub.child_places && (
-                    <div>
-                      <span className="detail-label">Child Places</span>
-                      <span className="detail-value">{sub.child_places}{sub.child_places_detail ? ` — ${sub.child_places_detail}` : ''}</span>
-                    </div>
-                  )}
-
-                  {sub.medical_insurance && (
-                    <div>
-                      <span className="detail-label">Medical</span>
-                      <span className="detail-value">Yes{sub.medical_insurance_detail ? ` — ${sub.medical_insurance_detail}` : ''}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="admin-card-actions">
-                <button
-                  className="btn btn-success btn-sm"
-                  onClick={() => handleAction(sub.id, 'approve')}
-                  disabled={!!isActioning}
-                >
-                  {isActioning === 'approve' ? 'Approving...' : 'Approve'}
-                </button>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleAction(sub.id, 'deny')}
-                  disabled={!!isActioning}
-                >
-                  {isActioning === 'deny' ? 'Denying...' : 'Deny'}
-                </button>
-
-                {isNewSchool && (
-                  <button
-                    className="btn btn-secondary btn-sm"
-                    onClick={() => setMatchingId(matchingId === sub.id ? null : sub.id)}
-                  >
-                    Match to School
-                  </button>
-                )}
-              </div>
-
-              {matchingId === sub.id && (
-                <div className="match-panel">
-                  <input
-                    type="text"
-                    className="form-input"
-                    placeholder="Search for existing school..."
-                    value={matchQuery}
-                    onChange={(e) => handleMatchSearch(e.target.value)}
-                  />
-                  {matchSearching && <span className="match-loading">Searching...</span>}
-                  {matchResults.length > 0 && (
-                    <ul className="match-results">
-                      {matchResults.map((school) => (
-                        <li key={school.id} className="match-item">
-                          <span>{school.name} ({school.countries?.name})</span>
-                          <button
-                            className="btn btn-primary btn-sm"
-                            onClick={() => handleMatchSchool(sub.id, school.id)}
-                          >
-                            Match
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                return (
+                  <tr key={sub.id} className={isNewSchool ? 'new-school-row' : ''}>
+                    <td className="col-school">
+                      {editingId === sub.id ? (
+                        <div className="edit-name-row">
+                          <input
+                            type="text"
+                            className="form-input edit-name-input"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleEditSchoolName(sub.id)}
+                          />
+                          <button className="btn btn-primary btn-xs" onClick={() => handleEditSchoolName(sub.id)}>Save</button>
+                          <button className="btn btn-secondary btn-xs" onClick={() => { setEditingId(null); setEditName(''); }}>Cancel</button>
+                        </div>
+                      ) : (
+                        <div className="school-cell">
+                          {isNewSchool && <span className="new-badge">NEW</span>}
+                          <span className="school-name">{schoolName}</span>
+                          {isNewSchool && (
+                            <button
+                              className="btn-edit-name"
+                              onClick={() => { setEditingId(sub.id); setEditName(sub.new_school_name); }}
+                              title="Edit school name"
+                            >
+                              ✎
+                            </button>
+                          )}
+                        </div>
+                      )}
+                      {matchingId === sub.id && (
+                        <div className="match-panel">
+                          <input
+                            type="text"
+                            className="form-input"
+                            placeholder="Search for existing school..."
+                            value={matchQuery}
+                            onChange={(e) => handleMatchSearch(e.target.value)}
+                          />
+                          {matchSearching && <span className="match-loading">Searching...</span>}
+                          {matchResults.length > 0 && (
+                            <ul className="match-results">
+                              {matchResults.map((school) => (
+                                <li key={school.id} className="match-item">
+                                  <span>{school.name} ({school.countries?.name})</span>
+                                  <button
+                                    className="btn btn-primary btn-xs"
+                                    onClick={() => handleMatchSchool(sub.id, school.id)}
+                                  >
+                                    Match
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    <td>{country}</td>
+                    <td>{getPositionLabel(sub.position)}</td>
+                    <td className="col-money">
+                      <span>{formatCurrency(sub[`gross_${field}`], currency)}</span>
+                      {sub.local_currency_code !== currency && (
+                        <span className="sub-amount">{formatCurrency(sub.gross_local, sub.local_currency_code)}</span>
+                      )}
+                    </td>
+                    <td className="col-money">
+                      {sub.net_pay ? formatCurrency(sub[`net_${field}`], currency) : '—'}
+                    </td>
+                    <td>{formatAccommodation(sub)}</td>
+                    <td className="col-benefits">{formatBenefits(sub)}</td>
+                    <td className="col-date">{new Date(sub.submitted_at).toLocaleDateString()}</td>
+                    <td className="col-actions">
+                      <button
+                        className="btn btn-success btn-xs"
+                        onClick={() => handleAction(sub.id, 'approve')}
+                        disabled={!!isActioning}
+                      >
+                        {isActioning === 'approve' ? '...' : 'Approve'}
+                      </button>
+                      <button
+                        className="btn btn-danger btn-xs"
+                        onClick={() => handleAction(sub.id, 'deny')}
+                        disabled={!!isActioning}
+                      >
+                        {isActioning === 'deny' ? '...' : 'Deny'}
+                      </button>
+                      {isNewSchool && (
+                        <button
+                          className="btn btn-secondary btn-xs"
+                          onClick={() => setMatchingId(matchingId === sub.id ? null : sub.id)}
+                        >
+                          Match
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

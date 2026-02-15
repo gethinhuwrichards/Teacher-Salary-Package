@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
               Archived
             </button>
             <button className="btn btn-secondary" onClick={() => navigate('/admin/past')}>
-              Past Submissions
+              Accepted Submissions
             </button>
             <button
               className="btn btn-danger btn-sm"

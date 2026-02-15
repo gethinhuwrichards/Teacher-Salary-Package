@@ -6,7 +6,8 @@
       "Bash(npm init:*)",
       "Bash(npx vite build)",
       "Bash(node -e:*)",
-      "Bash(node --check:*)"
+      "Bash(node --check:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

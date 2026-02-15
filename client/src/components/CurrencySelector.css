@@ -2,7 +2,7 @@
   padding: 0.4rem 0.6rem;
   border: 2px solid var(--gray-200);
   border-radius: 8px;
-  background: var(--white);
+  background: var(--gray-100);
   font-weight: 600;
   font-size: 0.85rem;
   color: var(--gray-700);
@@ -11,5 +11,5 @@
 }
 
 .currency-selector:hover {
-  border-color: var(--blue-400);
+  border-color: var(--teal-500);
 }

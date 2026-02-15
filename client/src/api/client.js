@@ -34,6 +34,7 @@ export const api = {
   getCountrySchools: (countryId) => request(`/countries/${countryId}/schools`),
 
   // Schools
+  getStats: () => request('/schools/stats'),
   searchSchools: (q, limit = 15) => request(`/schools/search?q=${encodeURIComponent(q)}&limit=${limit}`),
   getSchool: (id) => request(`/schools/${id}`),
   getSchoolSubmissions: (id) => request(`/schools/${id}/submissions`),
@@ -59,6 +60,10 @@ export const api = {
   }),
   restoreSubmission: (id) => request(`/admin/submissions/${id}/restore`, {
     method: 'PATCH',
+  }),
+  editSchoolName: (id, name) => request(`/admin/submissions/${id}/edit-school-name`, {
+    method: 'PATCH',
+    body: JSON.stringify({ name }),
   }),
   matchSchool: (id, schoolId) => request(`/admin/submissions/${id}/match-school`, {
     method: 'PATCH',

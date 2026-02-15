@@ -3,6 +3,34 @@ const router = express.Router();
 const supabase = require('../db/supabase');
 const { searchSchools } = require('../services/searchService');
 
+// GET /api/schools/stats — live counts for homepage
+router.get('/stats', async (req, res) => {
+  try {
+    // Count schools that have at least one approved submission
+    const { data: approvedSubs } = await supabase
+      .from('submissions')
+      .select('school_id')
+      .eq('status', 'approved')
+      .not('school_id', 'is', null);
+
+    const schoolIds = [...new Set((approvedSubs || []).map(s => s.school_id))];
+
+    // Count total approved submissions
+    const { count: submissionCount } = await supabase
+      .from('submissions')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'approved');
+
+    res.json({
+      schools: schoolIds.length,
+      submissions: submissionCount || 0,
+    });
+  } catch (err) {
+    console.error('Error fetching stats:', err);
+    res.status(500).json({ error: 'Failed to fetch stats' });
+  }
+});
+
 // GET /api/schools/search?q=&limit=15
 router.get('/search', async (req, res) => {
   try {

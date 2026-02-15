@@ -19,7 +19,7 @@
   padding: 0.5rem 1.25rem;
   border: 2px solid var(--gray-200);
   border-radius: 10px;
-  background: var(--white);
+  background: var(--gray-100);
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--gray-500);
@@ -29,9 +29,9 @@
 }
 
 .tab-btn.active {
-  border-color: var(--blue-500);
-  color: var(--blue-600);
-  background: var(--blue-50);
+  border-color: var(--teal-500);
+  color: var(--teal-700);
+  background: var(--teal-50);
 }
 
 .school-grid {
@@ -42,18 +42,19 @@
 }
 
 .school-card {
-  background: var(--white);
+  background: var(--gray-100);
   border: 1px solid var(--gray-200);
   border-radius: 12px;
   padding: 1.25rem;
   text-decoration: none;
   color: inherit;
   transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .school-card:hover {
-  border-color: var(--blue-300);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: var(--teal-200);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .school-card h3 {
@@ -78,7 +79,7 @@
 .avg-amount {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--blue-600);
+  color: var(--teal-600);
 }
 
 .avg-local {

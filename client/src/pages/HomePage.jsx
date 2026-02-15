@@ -1,62 +1,66 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { api } from '../api/client';
 import './HomePage.css';
 
 export default function HomePage() {
+  const [stats, setStats] = useState({ schools: 0, submissions: 0 });
+
+  useEffect(() => {
+    api.getStats().then(setStats).catch(() => {});
+  }, []);
+
   return (
     <div className="home-page">
       <section className="hero">
-        <div className="hero-content">
-          <h1>International School Salaries, Finally Transparent</h1>
-          <p className="hero-subtitle">
-            Real salary and benefits data shared by international school teachers across the globe.
-            Anonymous, verified, and completely free.
-          </p>
-          <div className="hero-ctas">
-            <Link to="/submit" className="btn btn-primary btn-lg">
-              Submit My Salary
-            </Link>
-            <Link to="/browse" className="btn btn-secondary btn-lg">
-              View Salaries
-            </Link>
+        <h1>International School Pay</h1>
+        <p className="hero-subtitle">
+          This site is made to share international school salaries and packages. It is made entirely of user submissions and is free to use and view. Please help the site by contributing your own current salary package.
+        </p>
+      </section>
+
+      <section className="how-it-works">
+        <div className="steps">
+          <div className="step">
+            <div className="step-icon">✏️</div>
+            <h3>Submit your package</h3>
+            <p>Anonymously share your salary, accommodation, pension and benefits. Takes under 2 minutes.</p>
           </div>
-        </div>
-        <div className="hero-visual">
-          <div className="stat-card">
-            <div className="stat-icon">🌍</div>
-            <div className="stat-number">169</div>
-            <div className="stat-label">Countries</div>
+          <div className="step step-accent">
+            <div className="step-icon">✅</div>
+            <h3>We review it</h3>
+            <p>Every submission is checked for quality before it goes live. No junk data.</p>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon">🏫</div>
-            <div className="stat-number">2,426</div>
-            <div className="stat-label">Schools</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">🔒</div>
-            <div className="stat-number">100%</div>
-            <div className="stat-label">Anonymous</div>
+          <div className="step">
+            <div className="step-icon">🔍</div>
+            <h3>Compare schools</h3>
+            <p>Search by school or country. See average teacher salaries and full package breakdowns.</p>
           </div>
         </div>
       </section>
 
-      <section className="how-it-works">
-        <h2>How It Works</h2>
-        <div className="steps">
-          <div className="step">
-            <div className="step-number">1</div>
-            <h3>Submit</h3>
-            <p>Share your international school salary and package anonymously. It takes less than 2 minutes.</p>
-          </div>
-          <div className="step">
-            <div className="step-number">2</div>
-            <h3>Review</h3>
-            <p>Our team reviews submissions to ensure data quality before publishing.</p>
-          </div>
-          <div className="step">
-            <div className="step-number">3</div>
-            <h3>Browse</h3>
-            <p>Search by international school or country to compare salaries and benefit packages.</p>
-          </div>
+      <section className="cta-section">
+        <div className="cta-card">
+          <h2>Help fellow teachers make informed decisions</h2>
+          <p>Your anonymous submission helps build the most complete salary database for international schools. Every data point matters.</p>
+          <Link to="/submit" className="btn btn-cta">
+            Submit My Salary
+          </Link>
+        </div>
+        <Link to="/browse" className="browse-link">
+          Or browse existing salary data →
+        </Link>
+      </section>
+
+      <section className="stats-bar">
+        <div className="stat">
+          <span className="stat-number">{stats.schools.toLocaleString()}</span>
+          <span className="stat-label">schools submitted</span>
+        </div>
+        <div className="stat-divider"></div>
+        <div className="stat">
+          <span className="stat-number">{stats.submissions.toLocaleString()}</span>
+          <span className="stat-label">salary submissions</span>
         </div>
       </section>
     </div>

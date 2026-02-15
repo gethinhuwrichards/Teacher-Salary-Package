@@ -135,7 +135,7 @@ export default function AdminPastSubmissionsPage() {
   return (
     <div className="admin-past">
       <div className="admin-header">
-        <h1>Past Submissions ({submissions.length})</h1>
+        <h1>Accepted Submissions ({submissions.length})</h1>
         <div className="admin-nav">
           <Link to="/admin/review" className="btn btn-primary btn-sm">Review Queue</Link>
           <Link to="/admin/archived" className="btn btn-secondary btn-sm">Archived</Link>
