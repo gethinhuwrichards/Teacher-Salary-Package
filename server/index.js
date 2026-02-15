@@ -20,6 +20,11 @@ app.use('/api/submissions', submissionsRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/currency', currencyRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Only listen when running locally (not on Vercel)
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
