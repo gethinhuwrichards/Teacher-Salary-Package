@@ -5,6 +5,7 @@ import './HomePage.css';
 
 export default function HomePage() {
   const [stats, setStats] = useState({ schools: 0, submissions: 0 });
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
 
   useEffect(() => {
     api.getStats().then(setStats).catch(() => {});
@@ -14,32 +15,6 @@ export default function HomePage() {
     <div className="home-page">
       <section className="hero">
         <h1>International School Pay</h1>
-        <p className="hero-subtitle">
-          This site is made to share international school salaries and packages. It is made entirely of user submissions and is free to use and view. Please help the site by contributing your own current salary package.
-        </p>
-      </section>
-
-      <section className="how-it-works">
-        <div className="steps">
-          <div className="step">
-            <div className="step-icon">✏️</div>
-            <h3>Submit your package</h3>
-            <p>Anonymously share your salary, accommodation, pension and benefits. Takes under 2 minutes.</p>
-          </div>
-          <div className="step step-accent">
-            <div className="step-icon">✅</div>
-            <h3>We review it</h3>
-            <p>Every submission is checked for quality before it goes live. No junk data.</p>
-          </div>
-          <div className="step">
-            <div className="step-icon">🔍</div>
-            <h3>Compare schools</h3>
-            <p>Search by school or country. See average teacher salaries and full package breakdowns.</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="cta-section">
         <div className="cta-card">
           <h2>Help fellow teachers make informed decisions</h2>
           <p>Your anonymous submission helps build the most complete salary database for international schools. Every data point matters.</p>
@@ -51,6 +26,35 @@ export default function HomePage() {
           Or browse existing salary data →
         </Link>
       </section>
+
+      <button
+        className="how-toggle"
+        onClick={() => setShowHowItWorks(!showHowItWorks)}
+      >
+        How does it work? {showHowItWorks ? '▲' : '▼'}
+      </button>
+
+      {showHowItWorks && (
+        <section className="how-it-works">
+          <div className="steps">
+            <div className="step">
+              <div className="step-icon">✏️</div>
+              <h3>Submit your package</h3>
+              <p>Anonymously share your salary, accommodation, pension and benefits. Takes under 2 minutes.</p>
+            </div>
+            <div className="step step-accent">
+              <div className="step-icon">✅</div>
+              <h3>We review it</h3>
+              <p>Every submission is checked for quality before it goes live. No junk data.</p>
+            </div>
+            <div className="step">
+              <div className="step-icon">🔍</div>
+              <h3>Compare schools</h3>
+              <p>Search by school or country. See average teacher salaries and full package breakdowns.</p>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="stats-bar">
         <div className="stat">

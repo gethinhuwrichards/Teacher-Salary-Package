@@ -14,20 +14,31 @@
   font-weight: 800;
   color: var(--gray-900);
   line-height: 1.1;
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.5rem;
 }
 
-.hero-subtitle {
-  font-size: 1.05rem;
-  color: var(--gray-500);
-  max-width: 580px;
+/* How it works toggle */
+.how-toggle {
+  display: block;
   margin: 0 auto;
-  line-height: 1.7;
+  background: none;
+  border: none;
+  color: var(--gray-800);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
 }
 
-/* How it works — the centrepiece */
+.how-toggle:hover {
+  color: var(--teal-600);
+}
+
+/* How it works */
 .how-it-works {
-  padding: 2.5rem 0;
+  padding: 1.5rem 0 2.5rem;
 }
 
 .steps {
@@ -74,12 +85,6 @@
   line-height: 1.5;
 }
 
-/* CTA section — submit is large and dominant */
-.cta-section {
-  text-align: center;
-  padding: 1rem 0 2rem;
-}
-
 .cta-card {
   background: var(--teal-50);
   border: 1px solid var(--teal-200);
@@ -105,18 +110,18 @@
 
 .btn-cta {
   background: var(--amber-400);
-  color: var(--gray-900);
+  color: #ffffff;
   font-size: 1.15rem;
   font-weight: 700;
   padding: 1rem 2.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(251, 191, 36, 0.25);
+  box-shadow: 0 4px 16px rgba(221, 112, 11, 0.25);
   letter-spacing: 0.2px;
 }
 
 .btn-cta:hover {
   background: var(--amber-500);
-  box-shadow: 0 6px 24px rgba(251, 191, 36, 0.35);
+  box-shadow: 0 6px 24px rgba(221, 112, 11, 0.35);
   transform: translateY(-2px);
 }
 

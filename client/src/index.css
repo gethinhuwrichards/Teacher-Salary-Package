@@ -1,57 +1,57 @@
 :root {
-  /* Teal - primary action colour */
-  --teal-50: #f0fdfa;
-  --teal-100: #ccfbf1;
-  --teal-200: #99f6e4;
-  --teal-500: #14b8a6;
-  --teal-600: #0d9488;
-  --teal-700: #0f766e;
+  /* Orange accent — #DD700B from palette */
+  --teal-50: #FCF8D8;
+  --teal-100: #FDE8D3;
+  --teal-200: #FBCFA6;
+  --teal-500: #DD700B;
+  --teal-600: #C46209;
+  --teal-700: #A85308;
 
-  /* Warm accent */
-  --amber-50: #fffbeb;
-  --amber-100: #fef3c7;
-  --amber-400: #fbbf24;
-  --amber-500: #f59e0b;
-  --amber-600: #d97706;
+  /* Warm accent — mapped to orange */
+  --amber-50: #FCF8D8;
+  --amber-100: #FDE8D3;
+  --amber-400: #DD700B;
+  --amber-500: #C46209;
+  --amber-600: #A85308;
 
-  /* Blues - kept for links / info */
-  --blue-50: #eff6ff;
-  --blue-100: #dbeafe;
-  --blue-200: #bfdbfe;
-  --blue-400: #60a5fa;
-  --blue-500: #3b82f6;
-  --blue-600: #2563eb;
-  --blue-700: #1d4ed8;
+  /* Links / info — orange */
+  --blue-50: #FEF4EB;
+  --blue-100: #FDE8D3;
+  --blue-200: #FBCFA6;
+  --blue-400: #DD700B;
+  --blue-500: #C46209;
+  --blue-600: #DD700B;
+  --blue-700: #A85308;
 
-  /* Yellows */
-  --yellow-50: #fefce8;
-  --yellow-100: #fef9c3;
-  --yellow-200: #fef08a;
-  --yellow-400: #facc15;
-  --yellow-500: #eab308;
-  --yellow-600: #ca8a04;
-  --yellow-700: #a16207;
+  /* Yellows — cream tones from palette */
+  --yellow-50: #FCF8D8;
+  --yellow-100: #F7F0C0;
+  --yellow-200: #F0E5A0;
+  --yellow-400: #DD700B;
+  --yellow-500: #C46209;
+  --yellow-600: #A85308;
+  --yellow-700: #8B4507;
 
-  /* Grays - light mode */
-  --gray-50: #f8fafc;
+  /* Grays — from palette: #7C7D75 #ADACA7 #D9DADF */
+  --gray-50: #FAFAF8;
   --gray-100: #ffffff;
-  --gray-200: #e2e8f0;
-  --gray-300: #cbd5e1;
-  --gray-400: #94a3b8;
-  --gray-500: #64748b;
-  --gray-600: #475569;
-  --gray-700: #334155;
-  --gray-800: #1e293b;
-  --gray-900: #0f172a;
+  --gray-200: #D9DADF;
+  --gray-300: #C2C2BD;
+  --gray-400: #ADACA7;
+  --gray-500: #7C7D75;
+  --gray-600: #5C5D57;
+  --gray-700: #3D3E3A;
+  --gray-800: #1A1A1A;
+  --gray-900: #111111;
 
-  /* Greens */
+  /* Greens — functional */
   --green-50: #f0fdf4;
   --green-200: #bbf7d0;
   --green-500: #22c55e;
   --green-600: #16a34a;
   --green-700: #15803d;
 
-  /* Reds */
+  /* Reds — functional */
   --red-50: #fef2f2;
   --red-100: #fee2e2;
   --red-200: #fecaca;
@@ -59,9 +59,9 @@
   --red-600: #dc2626;
   --red-700: #b91c1c;
 
-  /* Purples */
-  --purple-100: #f3e8ff;
-  --purple-700: #7c3aed;
+  /* Purples — mapped to palette grays */
+  --purple-100: #D9DADF;
+  --purple-700: #7C7D75;
 
   /* Base */
   --white: #ffffff;
@@ -173,12 +173,12 @@ h1, h2, h3 {
 .btn-primary {
   background: var(--teal-600);
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.2);
+  box-shadow: 0 2px 8px rgba(221, 112, 11, 0.2);
 }
 
 .btn-primary:hover {
   background: var(--teal-700);
-  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.25);
+  box-shadow: 0 4px 14px rgba(221, 112, 11, 0.25);
   transform: translateY(-1px);
 }
 
