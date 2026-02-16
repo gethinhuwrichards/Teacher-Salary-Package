@@ -72,7 +72,7 @@
 }
 
 .filter-item:hover {
-  background: var(--blue-50);
+  background: var(--gold-50);
 }
 
 .filter-country {
@@ -83,7 +83,7 @@
 .clear-filter-btn {
   background: none;
   border: none;
-  color: var(--blue-600);
+  color: var(--gold-dark);
   font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
@@ -145,12 +145,12 @@
 .past-table input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: var(--blue-600);
+  accent-color: var(--gold-dark);
   cursor: pointer;
 }
 
 .row-selected {
-  background: var(--blue-50);
+  background: var(--gold-50);
 }
 
 .cell-school {

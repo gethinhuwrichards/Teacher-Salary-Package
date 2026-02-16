@@ -1,72 +1,56 @@
 :root {
-  /* Orange accent — #DD700B from palette */
-  --teal-50: #FCF8D8;
-  --teal-100: #FDE8D3;
-  --teal-200: #FBCFA6;
-  --teal-500: #DD700B;
-  --teal-600: #C46209;
-  --teal-700: #A85308;
+  /* Ink — authority, depth */
+  --ink: #1B2838;
+  --ink-light: #2A3B4D;
+  --ink-lighter: #3D5166;
 
-  /* Warm accent — mapped to orange */
-  --amber-50: #FCF8D8;
-  --amber-100: #FDE8D3;
-  --amber-400: #DD700B;
-  --amber-500: #C46209;
-  --amber-600: #A85308;
+  /* Gold — accent, warmth */
+  --gold: #C17D10;
+  --gold-dark: #A06A0D;
+  --gold-darker: #86590B;
+  --gold-50: #FEF9F0;
+  --gold-100: #F5E6C4;
+  --gold-200: #EBCF94;
 
-  /* Links / info — orange */
-  --blue-50: #FEF4EB;
-  --blue-100: #FDE8D3;
-  --blue-200: #FBCFA6;
-  --blue-400: #DD700B;
-  --blue-500: #C46209;
-  --blue-600: #DD700B;
-  --blue-700: #A85308;
-
-  /* Yellows — cream tones from palette */
-  --yellow-50: #FCF8D8;
-  --yellow-100: #F7F0C0;
-  --yellow-200: #F0E5A0;
-  --yellow-400: #DD700B;
-  --yellow-500: #C46209;
-  --yellow-600: #A85308;
-  --yellow-700: #8B4507;
-
-  /* Grays — from palette: #7C7D75 #ADACA7 #D9DADF */
-  --gray-50: #FAFAF8;
+  /* Warm grays */
+  --gray-50: #F8F6F1;
   --gray-100: #ffffff;
-  --gray-200: #D9DADF;
-  --gray-300: #C2C2BD;
-  --gray-400: #ADACA7;
-  --gray-500: #7C7D75;
-  --gray-600: #5C5D57;
-  --gray-700: #3D3E3A;
-  --gray-800: #1A1A1A;
-  --gray-900: #111111;
+  --gray-200: #E5E0D8;
+  --gray-300: #CCC6BC;
+  --gray-400: #B5B0A8;
+  --gray-500: #918C83;
+  --gray-600: #6B6660;
+  --gray-700: #4A4540;
+  --gray-800: #1B2838;
+  --gray-900: #0F1923;
 
   /* Greens — functional */
-  --green-50: #f0fdf4;
-  --green-200: #bbf7d0;
-  --green-500: #22c55e;
-  --green-600: #16a34a;
-  --green-700: #15803d;
+  --green-50: #f0f7f2;
+  --green-200: #b8dcc5;
+  --green-500: #1D7847;
+  --green-600: #18633B;
+  --green-700: #134F30;
 
   /* Reds — functional */
-  --red-50: #fef2f2;
-  --red-100: #fee2e2;
-  --red-200: #fecaca;
-  --red-500: #ef4444;
-  --red-600: #dc2626;
-  --red-700: #b91c1c;
+  --red-50: #fdf2f2;
+  --red-100: #fce4e4;
+  --red-200: #f5c5c5;
+  --red-500: #C23030;
+  --red-600: #A52828;
+  --red-700: #8B2020;
 
-  /* Purples — mapped to palette grays */
-  --purple-100: #D9DADF;
-  --purple-700: #7C7D75;
+  /* Badge variants */
+  --badge-teacher-bg: #FEF9F0;
+  --badge-teacher-text: #8B6914;
+  --badge-middle-bg: #EEF0F4;
+  --badge-middle-text: #3D5166;
+  --badge-senior-bg: #E8E4DF;
+  --badge-senior-text: #4A4540;
 
   /* Base */
   --white: #ffffff;
-  --font-body: 'DM Sans', sans-serif;
-  --font-display: 'Fira Sans', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-display: 'Merriweather', serif;
 }
 
 * {
@@ -84,6 +68,7 @@ body {
 
 h1, h2, h3 {
   font-family: var(--font-display);
+  letter-spacing: normal;
 }
 
 .app-layout {
@@ -132,7 +117,7 @@ h1, h2, h3 {
 .form-input:focus,
 .form-select:focus {
   outline: none;
-  border-color: var(--teal-500);
+  border-color: var(--gold);
 }
 
 .form-input::placeholder {
@@ -151,7 +136,7 @@ h1, h2, h3 {
 .checkbox-label input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: var(--teal-600);
+  accent-color: var(--gold-dark);
 }
 
 /* Buttons */
@@ -171,14 +156,14 @@ h1, h2, h3 {
 }
 
 .btn-primary {
-  background: var(--teal-600);
+  background: var(--gold);
   color: var(--white);
-  box-shadow: 0 2px 8px rgba(221, 112, 11, 0.2);
+  box-shadow: 0 2px 8px rgba(193, 125, 16, 0.2);
 }
 
 .btn-primary:hover {
-  background: var(--teal-700);
-  box-shadow: 0 4px 14px rgba(221, 112, 11, 0.25);
+  background: var(--gold-dark);
+  box-shadow: 0 4px 14px rgba(193, 125, 16, 0.25);
   transform: translateY(-1px);
 }
 

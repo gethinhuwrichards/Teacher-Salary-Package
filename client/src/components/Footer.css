@@ -1,7 +1,7 @@
 .footer {
-  background: var(--gray-100);
-  border-top: 1px solid var(--gray-200);
-  color: var(--gray-500);
+  background: var(--ink);
+  border-top: 1px solid var(--ink-light);
+  color: rgba(255, 255, 255, 0.5);
   padding: 2rem 1.5rem;
   text-align: center;
   margin-top: auto;
@@ -20,5 +20,5 @@
 .footer-sub {
   margin-top: 0.25rem;
   font-size: 0.8rem;
-  color: var(--gray-500);
+  color: rgba(255, 255, 255, 0.35);
 }

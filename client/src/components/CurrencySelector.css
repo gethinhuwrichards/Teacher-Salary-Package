@@ -1,15 +1,16 @@
 .currency-selector {
   padding: 0.5rem 0.75rem;
-  border: 2px solid var(--gray-200);
+  border: 1px solid var(--ink-light);
   border-radius: 8px;
-  background: var(--gray-100);
+  background: var(--ink-light);
   font-weight: 600;
   font-size: 0.85rem;
-  color: var(--gray-700);
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, color 0.2s;
 }
 
 .currency-selector:hover {
-  border-color: var(--teal-500);
+  border-color: var(--gold);
+  color: var(--gold);
 }

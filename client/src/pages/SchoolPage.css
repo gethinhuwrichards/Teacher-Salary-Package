@@ -4,7 +4,7 @@
 }
 
 .back-link {
-  color: var(--blue-600);
+  color: var(--gold-dark);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -30,13 +30,13 @@
 }
 
 .headline-card {
-  background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
+  background: var(--ink);
   color: var(--white);
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
   text-align: center;
-  box-shadow: 0 4px 14px rgba(221, 112, 11, 0.25);
+  box-shadow: 0 4px 14px rgba(27, 40, 56, 0.3);
 }
 
 .headline-label {
@@ -50,6 +50,8 @@
 .headline-amount {
   font-size: 2.5rem;
   font-weight: 800;
+  font-family: var(--font-display);
+  color: var(--gold);
 }
 
 .headline-local {

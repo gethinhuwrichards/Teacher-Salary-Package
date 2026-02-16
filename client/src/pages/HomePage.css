@@ -33,7 +33,7 @@
 }
 
 .how-toggle:hover {
-  color: var(--teal-600);
+  color: var(--gold);
 }
 
 /* How it works */
@@ -63,8 +63,8 @@
 }
 
 .step-accent {
-  border-color: var(--teal-200);
-  background: var(--teal-50);
+  border-color: var(--gold-200);
+  background: var(--gold-50);
 }
 
 .step-icon {
@@ -86,22 +86,23 @@
 }
 
 .cta-card {
-  background: var(--teal-50);
-  border: 1px solid var(--teal-200);
-  color: var(--gray-900);
+  background: var(--ink);
+  border: none;
+  color: var(--white);
   border-radius: 16px;
   padding: 3rem 2.5rem;
+  text-align: center;
 }
 
 .cta-card h2 {
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 0.75rem;
-  color: var(--gray-900);
+  color: var(--white);
 }
 
 .cta-card p {
-  color: var(--gray-500);
+  color: rgba(255, 255, 255, 0.65);
   max-width: 440px;
   margin: 0 auto 1.5rem;
   font-size: 0.95rem;
@@ -109,19 +110,19 @@
 }
 
 .btn-cta {
-  background: var(--amber-400);
+  background: var(--gold);
   color: var(--white);
   font-size: 1.1rem;
   font-weight: 700;
   padding: 1rem 2.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(221, 112, 11, 0.25);
+  box-shadow: 0 4px 14px rgba(193, 125, 16, 0.3);
   letter-spacing: 0.2px;
 }
 
 .btn-cta:hover {
-  background: var(--amber-500);
-  box-shadow: 0 6px 24px rgba(221, 112, 11, 0.3);
+  background: var(--gold-dark);
+  box-shadow: 0 6px 24px rgba(193, 125, 16, 0.35);
   transform: translateY(-2px);
 }
 
@@ -136,7 +137,7 @@
 }
 
 .browse-link:hover {
-  color: var(--teal-600);
+  color: var(--gold);
 }
 
 /* Stats bar — understated strip at bottom */

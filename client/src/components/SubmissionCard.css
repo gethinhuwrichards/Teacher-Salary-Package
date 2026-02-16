@@ -26,18 +26,18 @@
 }
 
 .badge-teacher {
-  background: var(--teal-100);
-  color: var(--teal-700);
+  background: var(--badge-teacher-bg);
+  color: var(--badge-teacher-text);
 }
 
 .badge-middle {
-  background: var(--yellow-100);
-  color: var(--yellow-700);
+  background: var(--badge-middle-bg);
+  color: var(--badge-middle-text);
 }
 
 .badge-senior {
-  background: var(--purple-100);
-  color: var(--purple-700);
+  background: var(--badge-senior-bg);
+  color: var(--badge-senior-text);
 }
 
 .card-date {
@@ -68,7 +68,8 @@
 .salary-amount {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--gray-900);
+  color: var(--ink);
+  font-family: var(--font-display);
 }
 
 .salary-local {

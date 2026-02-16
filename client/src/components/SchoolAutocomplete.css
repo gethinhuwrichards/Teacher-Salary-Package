@@ -44,7 +44,7 @@
 }
 
 .autocomplete-item:hover {
-  background: var(--blue-50);
+  background: var(--gold-50);
 }
 
 .school-name {
@@ -69,7 +69,7 @@
   margin-top: 0.5rem;
   background: none;
   border: none;
-  color: var(--blue-600);
+  color: var(--gold-dark);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -100,7 +100,7 @@
 }
 
 .back-to-search-btn:hover {
-  color: var(--blue-600);
+  color: var(--gold-dark);
   text-decoration: underline;
 }
 

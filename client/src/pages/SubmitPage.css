@@ -122,7 +122,7 @@
   margin-top: 0.5rem;
   background: none;
   border: none;
-  color: var(--blue-600);
+  color: var(--gold-dark);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -137,8 +137,8 @@
 .calc-box {
   margin-top: 0.75rem;
   padding: 1rem;
-  background: var(--blue-50);
-  border: 1px solid var(--blue-200);
+  background: var(--gold-50);
+  border: 1px solid var(--gold-200);
   border-radius: 8px;
 }
 
