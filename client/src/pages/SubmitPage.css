@@ -97,7 +97,7 @@
   height: 64px;
   border-radius: 50%;
   background: var(--green-500);
-  color: #ffffff;
+  color: var(--white);
   font-size: 2rem;
   font-weight: 700;
   display: flex;
@@ -109,7 +109,7 @@
 .success-message h2 {
   margin: 0 0 0.75rem;
   color: var(--gray-900);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
 }
 
 .success-message p {
@@ -154,7 +154,7 @@
     flex-direction: column;
   }
 
-  .form-row .form-group {
-    min-width: 100% !important;
+  .submit-page .form-row .form-group {
+    min-width: 100%;
   }
 }

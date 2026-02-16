@@ -31,12 +31,12 @@
 
 .headline-card {
   background: linear-gradient(135deg, var(--teal-600), var(--teal-700));
-  color: #ffffff;
+  color: var(--white);
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
   text-align: center;
-  box-shadow: 0 4px 14px rgba(221, 112, 11, 0.2);
+  box-shadow: 0 4px 14px rgba(221, 112, 11, 0.25);
 }
 
 .headline-label {
@@ -69,7 +69,7 @@
 }
 
 .position-heading {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--gray-800);
   margin: 0 0 1rem;
   padding-bottom: 0.5rem;

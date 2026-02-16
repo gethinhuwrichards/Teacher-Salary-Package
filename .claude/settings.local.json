@@ -18,7 +18,8 @@
       "Bash(vercel logs:*)",
       "Bash(./node_modules/.bin/vercel:*)",
       "Bash(npm ls:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git status:*)"
     ]
   }
 }
