@@ -16,10 +16,8 @@ export default function SubmitPage() {
   const [grossCurrency, setGrossCurrency] = useState('');
   const [accommodationType, setAccommodationType] = useState('');
   const [accommodationAllowance, setAccommodationAllowance] = useState('');
-  const [accommodationCurrency, setAccommodationCurrency] = useState('');
 
   const [netPay, setNetPay] = useState('');
-  const [netCurrency, setNetCurrency] = useState('');
   const [taxNotApplicable, setTaxNotApplicable] = useState(false);
   const [pensionOffered, setPensionOffered] = useState(false);
   const [pensionPercentage, setPensionPercentage] = useState('');
@@ -110,12 +108,12 @@ export default function SubmitPage() {
 
       if (accommodationType === 'allowance' && accommodationAllowance) {
         data.accommodation_allowance = parseFloat(accommodationAllowance);
-        data.accommodation_currency = accommodationCurrency || grossCurrency;
+        data.accommodation_currency = grossCurrency;
       }
 
-      if (netPay && netCurrency) {
+      if (netPay) {
         data.net_pay = parseFloat(netPay);
-        data.net_currency = netCurrency;
+        data.net_currency = grossCurrency;
       }
 
       data.tax_not_applicable = taxNotApplicable;
@@ -284,26 +282,16 @@ export default function SubmitPage() {
             </select>
           </div>
           {accommodationType === 'allowance' && (
-            <div className="form-row" style={{ marginTop: '0.75rem' }}>
-              <div className="form-group flex-grow">
-                <label className="form-label">Allowance Amount (per year)</label>
-                <input
-                  type="number"
-                  className="form-input"
-                  placeholder="e.g. 12000"
-                  value={accommodationAllowance}
-                  onChange={(e) => setAccommodationAllowance(e.target.value)}
-                />
-              </div>
-              <div className="form-group" style={{ minWidth: '120px' }}>
-                <label className="form-label">Currency</label>
-                <select className="form-select" value={accommodationCurrency} onChange={(e) => setAccommodationCurrency(e.target.value)}>
-                  <option value="">Select...</option>
-                  {currencyOptions.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
+            <div className="form-group" style={{ marginTop: '0.75rem' }}>
+              <label className="form-label">Allowance Amount (per year){grossCurrency ? ` in ${grossCurrency}` : ''}</label>
+              <input
+                type="number"
+                className="form-input"
+                placeholder="e.g. 12000"
+                value={accommodationAllowance}
+                onChange={(e) => setAccommodationAllowance(e.target.value)}
+                style={{ maxWidth: '280px' }}
+              />
             </div>
           )}
         </section>
@@ -326,26 +314,16 @@ export default function SubmitPage() {
 
           {!taxNotApplicable && (
             <>
-              <div className="form-row">
-                <div className="form-group flex-grow">
-                  <label className="form-label">Estimated Net Pay Per Annum (after tax)</label>
-                  <input
-                    type="number"
-                    className="form-input"
-                    placeholder="e.g. 38000"
-                    value={netPay}
-                    onChange={(e) => setNetPay(e.target.value)}
-                  />
-                </div>
-                <div className="form-group" style={{ minWidth: '120px' }}>
-                  <label className="form-label">Currency</label>
-                  <select className="form-select" value={netCurrency} onChange={(e) => setNetCurrency(e.target.value)}>
-                    <option value="">Select...</option>
-                    {currencyOptions.map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </div>
+              <div className="form-group">
+                <label className="form-label">Estimated Net Pay Per Annum (after tax){grossCurrency ? ` in ${grossCurrency}` : ''}</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  placeholder="e.g. 38000"
+                  value={netPay}
+                  onChange={(e) => setNetPay(e.target.value)}
+                  style={{ maxWidth: '280px' }}
+                />
               </div>
               {!showNetCalc ? (
                 <button type="button" className="help-calc-btn" onClick={() => setShowNetCalc(true)}>

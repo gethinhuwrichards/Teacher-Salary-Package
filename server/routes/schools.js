@@ -31,6 +31,68 @@ router.get('/stats', async (req, res) => {
   }
 });
 
+// GET /api/schools/browse — all schools with approved submissions + averages
+router.get('/browse', async (req, res) => {
+  try {
+    const teacherPositions = ['classroom_teacher', 'teacher_additional_responsibilities', 'middle_leader'];
+
+    // Get all approved submissions with salary data
+    const { data: approvedSubs, error: subErr } = await supabase
+      .from('submissions')
+      .select('school_id, position, gross_usd, gross_gbp, gross_eur, gross_local, local_currency_code')
+      .eq('status', 'approved')
+      .not('school_id', 'is', null);
+
+    if (subErr) throw subErr;
+
+    const schoolIds = [...new Set((approvedSubs || []).map(s => s.school_id))];
+    if (schoolIds.length === 0) return res.json([]);
+
+    // Get schools with country info
+    const { data: schools, error: schErr } = await supabase
+      .from('schools')
+      .select('id, name, country_id, countries(name)')
+      .in('id', schoolIds)
+      .order('name');
+
+    if (schErr) throw schErr;
+
+    // Group submissions by school and compute averages
+    const subsBySchool = {};
+    for (const sub of approvedSubs) {
+      if (!subsBySchool[sub.school_id]) subsBySchool[sub.school_id] = [];
+      subsBySchool[sub.school_id].push(sub);
+    }
+
+    const result = schools.map(school => {
+      const subs = (subsBySchool[school.id] || []).filter(s => teacherPositions.includes(s.position));
+      let averages = null;
+      if (subs.length > 0) {
+        const sum = subs.reduce((acc, s) => ({
+          usd: acc.usd + Number(s.gross_usd || 0),
+          gbp: acc.gbp + Number(s.gross_gbp || 0),
+          eur: acc.eur + Number(s.gross_eur || 0),
+          local: acc.local + Number(s.gross_local || 0),
+        }), { usd: 0, gbp: 0, eur: 0, local: 0 });
+        const count = subs.length;
+        averages = {
+          usd: Math.round(sum.usd / count),
+          gbp: Math.round(sum.gbp / count),
+          eur: Math.round(sum.eur / count),
+          local: Math.round(sum.local / count),
+          local_currency_code: subs[0].local_currency_code,
+        };
+      }
+      return { ...school, averages };
+    });
+
+    res.json(result);
+  } catch (err) {
+    console.error('Error fetching browse schools:', err);
+    res.status(500).json({ error: 'Failed to fetch schools' });
+  }
+});
+
 // GET /api/schools/search?q=&limit=15
 router.get('/search', async (req, res) => {
   try {

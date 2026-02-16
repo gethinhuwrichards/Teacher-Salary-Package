@@ -35,6 +35,7 @@ export const api = {
 
   // Schools
   getStats: () => request('/schools/stats'),
+  getBrowseSchools: () => request('/schools/browse'),
   searchSchools: (q, limit = 15) => request(`/schools/search?q=${encodeURIComponent(q)}&limit=${limit}`),
   getSchool: (id) => request(`/schools/${id}`),
   getSchoolSubmissions: (id) => request(`/schools/${id}/submissions`),
