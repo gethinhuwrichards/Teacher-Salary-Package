@@ -24,6 +24,26 @@
   font-size: 0.9rem;
 }
 
+.low-salary-warning {
+  background: #FFF8E1;
+  border: 1px solid #FFD54F;
+  color: var(--gray-800);
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.low-salary-warning p {
+  margin: 0 0 0.75rem;
+}
+
+.low-salary-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .submit-form {
   display: flex;
   flex-direction: column;

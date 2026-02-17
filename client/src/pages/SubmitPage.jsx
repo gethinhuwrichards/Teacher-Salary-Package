@@ -35,12 +35,16 @@ export default function SubmitPage() {
   const [netMonthly, setNetMonthly] = useState('');
   const [netMonths, setNetMonths] = useState('');
 
+  const [showLowSalaryWarning, setShowLowSalaryWarning] = useState(false);
+  const [exchangeRates, setExchangeRates] = useState(null);
+
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     api.getAllCountries().then(setCountries).catch(() => {});
+    api.getRates().then(data => setExchangeRates(data.rates)).catch(() => {});
   }, []);
 
   // When school is selected, determine local currency
@@ -73,6 +77,17 @@ export default function SubmitPage() {
     return options;
   }
 
+  const LOW_SALARY_THRESHOLD_USD = 12000;
+
+  function isLowSalary(amount, currency) {
+    if (currency === 'USD') return amount < LOW_SALARY_THRESHOLD_USD;
+    if (!exchangeRates) return false;
+    const rate = exchangeRates[currency];
+    if (!rate) return false;
+    const usdEquivalent = amount / rate;
+    return usdEquivalent < LOW_SALARY_THRESHOLD_USD;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
@@ -93,6 +108,13 @@ export default function SubmitPage() {
       setError('Net pay cannot be greater than gross pay. Net pay should be your take-home amount after tax.');
       return;
     }
+
+    // Low salary warning — show once, let them confirm
+    if (!showLowSalaryWarning && isLowSalary(parseFloat(grossPay), grossCurrency)) {
+      setShowLowSalaryWarning(true);
+      return;
+    }
+    setShowLowSalaryWarning(false);
 
     setSubmitting(true);
     try {
@@ -204,7 +226,7 @@ export default function SubmitPage() {
                 className="form-input"
                 placeholder="e.g. 45000"
                 value={grossPay}
-                onChange={(e) => setGrossPay(e.target.value)}
+                onChange={(e) => { setGrossPay(e.target.value); setShowLowSalaryWarning(false); }}
               />
             </div>
             <div className="form-group" style={{ minWidth: '120px' }}>
@@ -470,6 +492,16 @@ export default function SubmitPage() {
         </section>
 
         {error && <div className="error-banner">{error}</div>}
+
+        {showLowSalaryWarning && (
+          <div className="low-salary-warning">
+            <p>Are you sure? Please ensure you submit your <strong>annual</strong> gross, not monthly. Use the "Help calculating" option if you are not sure.</p>
+            <div className="low-salary-actions">
+              <button type="submit" className="btn btn-primary btn-sm">Yes, Submit</button>
+              <button type="button" className="btn btn-secondary btn-sm" onClick={() => setShowLowSalaryWarning(false)}>Go Back</button>
+            </div>
+          </div>
+        )}
 
         <button
           type="submit"
