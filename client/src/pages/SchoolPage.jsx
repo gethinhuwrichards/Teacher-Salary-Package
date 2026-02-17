@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import { api } from '../api/client';
 import { useCurrency } from '../context/CurrencyContext';
 import { formatCurrency, getCurrencyField } from '../utils/formatCurrency';
-import { getPositionLabel } from '../utils/constants';
 import SubmissionCard from '../components/SubmissionCard';
 import './SchoolPage.css';
 
@@ -37,20 +36,10 @@ export default function SchoolPage() {
     return <div className="empty-state">School not found.</div>;
   }
 
-  // Group submissions by position
-  const positionOrder = [
-    'classroom_teacher',
-    'teacher_additional_responsibilities',
-    'middle_leader',
-    'senior_leader_other',
-    'senior_leader_head',
-  ];
-
-  const grouped = {};
-  for (const sub of submissions) {
-    if (!grouped[sub.position]) grouped[sub.position] = [];
-    grouped[sub.position].push(sub);
-  }
+  // Sort submissions newest to oldest
+  const sorted = [...submissions].sort(
+    (a, b) => new Date(b.submitted_at) - new Date(a.submitted_at)
+  );
 
   return (
     <div className="school-page">
@@ -82,20 +71,12 @@ export default function SchoolPage() {
         <div className="empty-state">No approved submissions for this school yet.</div>
       ) : (
         <div className="submissions-list">
-          {positionOrder.map((pos) => {
-            const posSubmissions = grouped[pos];
-            if (!posSubmissions || posSubmissions.length === 0) return null;
-            return (
-              <div key={pos} className="position-group">
-                <h2 className="position-heading">{getPositionLabel(pos)}</h2>
-                <div className="submissions-grid">
-                  {posSubmissions.map((sub) => (
-                    <SubmissionCard key={sub.id} submission={sub} />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+          <h2 className="submissions-heading">Submissions</h2>
+          <div className="submissions-grid">
+            {sorted.map((sub) => (
+              <SubmissionCard key={sub.id} submission={sub} />
+            ))}
+          </div>
         </div>
       )}
     </div>

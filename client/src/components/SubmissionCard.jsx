@@ -18,7 +18,7 @@ export default function SubmissionCard({ submission }) {
           {getPositionLabel(s.position)}
         </span>
         <span className="card-date">
-          Submitted {new Date(s.submitted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+          Submitted: {new Date(s.submitted_at).getFullYear()}
         </span>
       </div>
 
