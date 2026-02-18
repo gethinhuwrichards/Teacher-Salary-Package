@@ -160,6 +160,7 @@ export default function AdminReviewPage() {
                 <th>Accommodation</th>
                 <th>Benefits</th>
                 <th>Date</th>
+                <th>IP</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -243,6 +244,7 @@ export default function AdminReviewPage() {
                     <td>{formatAccommodation(sub)}</td>
                     <td className="col-benefits">{formatBenefits(sub)}</td>
                     <td className="col-date">{new Date(sub.submitted_at).toLocaleDateString()}</td>
+                    <td className="col-ip">{sub.ip_address || '—'}</td>
                     <td className="col-actions">
                       <button
                         className="btn btn-success btn-xs"

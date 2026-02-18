@@ -232,6 +232,7 @@ export default function AdminPastSubmissionsPage() {
               <th>Position</th>
               <th>Gross Pay</th>
               <th>Date</th>
+              <th>IP</th>
             </tr>
           </thead>
           <tbody>
@@ -254,6 +255,7 @@ export default function AdminPastSubmissionsPage() {
                   )}
                 </td>
                 <td className="cell-date">{new Date(sub.submitted_at).toLocaleDateString()}</td>
+                <td className="cell-ip">{sub.ip_address || '—'}</td>
               </tr>
             ))}
           </tbody>

@@ -101,6 +101,7 @@ router.post('/', async (req, res) => {
       medical_insurance_detail: medical_insurance_detail || null,
       exchange_rate_date: grossConverted.rate_date,
       status: 'pending',
+      ip_address: req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || null,
     };
 
     // Convert accommodation allowance if applicable

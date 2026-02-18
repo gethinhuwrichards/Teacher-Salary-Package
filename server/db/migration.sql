@@ -67,7 +67,8 @@ CREATE TABLE submissions (
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'denied')),
   submitted_at TIMESTAMPTZ DEFAULT now(),
   reviewed_at TIMESTAMPTZ,
-  exchange_rate_date DATE
+  exchange_rate_date DATE,
+  ip_address TEXT
 );
 
 CREATE INDEX idx_submissions_school ON submissions(school_id);

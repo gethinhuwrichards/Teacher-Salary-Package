@@ -85,7 +85,7 @@ export default function AdminArchivedPage() {
               <div>
                 <h3>{sub.schools?.name || sub.new_school_name}</h3>
                 <span className="card-meta">
-                  {sub.schools?.countries?.name || sub.new_school_country} · {getPositionLabel(sub.position)} · Denied {new Date(sub.reviewed_at).toLocaleDateString()}
+                  {sub.schools?.countries?.name || sub.new_school_country} · {getPositionLabel(sub.position)} · Denied {new Date(sub.reviewed_at).toLocaleDateString()}{sub.ip_address ? ` · IP: ${sub.ip_address}` : ''}
                 </span>
               </div>
             </div>
