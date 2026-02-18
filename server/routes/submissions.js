@@ -135,27 +135,23 @@ router.post('/', async (req, res) => {
 
     if (error) throw error;
 
-    // Respond immediately — don't make the user wait for VPN check
-    res.status(201).json({ message: 'Submission received and pending review', id: data.id });
-
-    // Fire-and-forget: check IP against IPHub and flag if VPN
+    // Check IP against IPHub before responding
     if (data.ip_address) {
-      checkVpn(data.ip_address).then(async (isVpn) => {
+      try {
+        const isVpn = await checkVpn(data.ip_address);
+        console.log(`IPHub check for ${data.ip_address}: ${isVpn ? 'VPN DETECTED' : 'clean'}`);
         if (isVpn) {
-          const { error: updateError } = await supabase
+          await supabase
             .from('submissions')
             .update({ vpn_flagged: true })
             .eq('id', data.id);
-          if (updateError) {
-            console.error('Failed to flag VPN submission:', updateError.message);
-          } else {
-            console.log(`Submission ${data.id} flagged as VPN (IP: ${data.ip_address})`);
-          }
         }
-      }).catch((err) => {
-        console.error('VPN check error:', err.message);
-      });
+      } catch (vpnErr) {
+        console.error('VPN check error (non-blocking):', vpnErr.message);
+      }
     }
+
+    res.status(201).json({ message: 'Submission received and pending review', id: data.id });
   } catch (err) {
     console.error('Error creating submission:', err);
     res.status(500).json({ error: err.message || 'Failed to submit' });
