@@ -103,7 +103,19 @@ router.post('/', async (req, res) => {
       exchange_rate_date: grossConverted.rate_date,
       status: 'pending',
       ip_address: req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || null,
+      vpn_flagged: false,
     };
+
+    // Check IP against IPHub before insert
+    if (submission.ip_address) {
+      try {
+        const isVpn = await checkVpn(submission.ip_address);
+        console.log(`IPHub check for ${submission.ip_address}: ${isVpn ? 'VPN DETECTED' : 'clean'}`);
+        submission.vpn_flagged = isVpn;
+      } catch (vpnErr) {
+        console.error('VPN check error (non-blocking):', vpnErr.message);
+      }
+    }
 
     // Convert accommodation allowance if applicable
     if (accommodation_type === 'allowance' && accommodation_allowance && accommodation_currency) {
@@ -134,22 +146,6 @@ router.post('/', async (req, res) => {
       .single();
 
     if (error) throw error;
-
-    // Check IP against IPHub before responding
-    if (data.ip_address) {
-      try {
-        const isVpn = await checkVpn(data.ip_address);
-        console.log(`IPHub check for ${data.ip_address}: ${isVpn ? 'VPN DETECTED' : 'clean'}`);
-        if (isVpn) {
-          await supabase
-            .from('submissions')
-            .update({ vpn_flagged: true })
-            .eq('id', data.id);
-        }
-      } catch (vpnErr) {
-        console.error('VPN check error (non-blocking):', vpnErr.message);
-      }
-    }
 
     res.status(201).json({ message: 'Submission received and pending review', id: data.id });
   } catch (err) {
