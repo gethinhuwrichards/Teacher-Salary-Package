@@ -131,6 +131,7 @@ export default function AdminReviewPage() {
         <div className="admin-nav">
           <Link to="/admin/past" className="btn btn-secondary btn-sm">Accepted Submissions</Link>
           <Link to="/admin/archived" className="btn btn-secondary btn-sm">Archived</Link>
+          <Link to="/admin/malicious" className="btn btn-secondary btn-sm">Malicious IP</Link>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => {
@@ -173,7 +174,10 @@ export default function AdminReviewPage() {
                 const expanded = matchingId === sub.id || editingId === sub.id;
 
                 return (
-                  <tr key={sub.id} className={isNewSchool ? 'new-school-row' : ''}>
+                  <tr key={sub.id} className={[
+                    isNewSchool ? 'new-school-row' : '',
+                    sub.vpn_flagged ? 'vpn-flagged-row' : '',
+                  ].filter(Boolean).join(' ')}>
                     <td className="col-school">
                       {editingId === sub.id ? (
                         <div className="edit-name-row">
@@ -244,7 +248,10 @@ export default function AdminReviewPage() {
                     <td>{formatAccommodation(sub)}</td>
                     <td className="col-benefits">{formatBenefits(sub)}</td>
                     <td className="col-date">{new Date(sub.submitted_at).toLocaleDateString()}</td>
-                    <td className="col-ip">{sub.ip_address || '—'}</td>
+                    <td className="col-ip">
+                      {sub.vpn_flagged && <span className="vpn-badge">VPN</span>}
+                      {sub.ip_address || '—'}
+                    </td>
                     <td className="col-actions">
                       <button
                         className="btn btn-success btn-xs"

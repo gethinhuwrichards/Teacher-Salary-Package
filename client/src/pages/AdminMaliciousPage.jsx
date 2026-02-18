@@ -4,9 +4,9 @@ import { api } from '../api/client';
 import { useCurrency } from '../context/CurrencyContext';
 import { formatCurrency, getCurrencyField } from '../utils/formatCurrency';
 import { getPositionLabel } from '../utils/constants';
-import './AdminArchivedPage.css';
+import './AdminMaliciousPage.css';
 
-export default function AdminArchivedPage() {
+export default function AdminMaliciousPage() {
   const navigate = useNavigate();
   const { currency } = useCurrency();
   const field = getCurrencyField(currency);
@@ -21,13 +21,13 @@ export default function AdminArchivedPage() {
       navigate('/admin');
       return;
     }
-    loadArchived();
+    loadMalicious();
   }, []);
 
-  async function loadArchived() {
+  async function loadMalicious() {
     setLoading(true);
     try {
-      const data = await api.getAdminSubmissions('denied', false);
+      const data = await api.getAdminSubmissions('denied', true);
       setSubmissions(data);
     } catch (err) {
       if (err.message === 'Unauthorized' || err.message === 'Invalid or expired session') {
@@ -52,17 +52,17 @@ export default function AdminArchivedPage() {
   }
 
   if (loading) {
-    return <div className="loading">Loading archived submissions...</div>;
+    return <div className="loading">Loading malicious submissions...</div>;
   }
 
   return (
-    <div className="admin-archived">
+    <div className="admin-malicious">
       <div className="admin-header">
-        <h1>Archived Submissions ({submissions.length})</h1>
+        <h1>Malicious IP ({submissions.length})</h1>
         <div className="admin-nav">
           <Link to="/admin/review" className="btn btn-primary btn-sm">Review Queue</Link>
           <Link to="/admin/past" className="btn btn-secondary btn-sm">Accepted Submissions</Link>
-          <Link to="/admin/malicious" className="btn btn-secondary btn-sm">Malicious IP</Link>
+          <Link to="/admin/archived" className="btn btn-secondary btn-sm">Archived</Link>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => {
@@ -76,15 +76,18 @@ export default function AdminArchivedPage() {
       </div>
 
       {submissions.length === 0 && (
-        <div className="empty-state">No archived submissions.</div>
+        <div className="empty-state">No denied VPN-flagged submissions.</div>
       )}
 
       <div className="admin-submissions">
         {submissions.map((sub) => (
-          <div key={sub.id} className="admin-card archived-card">
+          <div key={sub.id} className="admin-card malicious-card">
             <div className="admin-card-header">
               <div>
-                <h3>{sub.schools?.name || sub.new_school_name}</h3>
+                <h3>
+                  <span className="vpn-badge">VPN</span>
+                  {sub.schools?.name || sub.new_school_name}
+                </h3>
                 <span className="card-meta">
                   {sub.schools?.countries?.name || sub.new_school_country} · {getPositionLabel(sub.position)} · Denied {new Date(sub.reviewed_at).toLocaleDateString()}{sub.ip_address ? ` · IP: ${sub.ip_address}` : ''}
                 </span>

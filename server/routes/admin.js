@@ -47,17 +47,25 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// GET /api/admin/submissions?status=pending|denied
+// GET /api/admin/submissions?status=pending|denied&vpn_flagged=true|false
 router.get('/submissions', adminAuth, async (req, res) => {
   try {
     const status = req.query.status || 'pending';
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('submissions')
       .select('*, schools(name, countries(name))')
       .eq('status', status)
       .order('submitted_at', { ascending: false });
 
+    // Optional VPN filter
+    if (req.query.vpn_flagged === 'true') {
+      query = query.eq('vpn_flagged', true);
+    } else if (req.query.vpn_flagged === 'false') {
+      query = query.eq('vpn_flagged', false);
+    }
+
+    const { data, error } = await query;
     if (error) throw error;
     res.json(data || []);
   } catch (err) {

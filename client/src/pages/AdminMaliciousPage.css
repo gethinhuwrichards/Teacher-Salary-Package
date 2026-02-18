@@ -1,0 +1,28 @@
+.admin-malicious {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.admin-malicious .admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-malicious .admin-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--gray-900);
+}
+
+.malicious-card {
+  border-left: 4px solid var(--purple-500);
+  background: var(--purple-50);
+}
+
+.malicious-card:hover {
+  background: var(--purple-100);
+}

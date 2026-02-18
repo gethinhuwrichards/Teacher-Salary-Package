@@ -80,6 +80,21 @@
   background: var(--red-50);
 }
 
+/* VPN-flagged row */
+.vpn-flagged-row {
+  background: var(--purple-50);
+}
+
+.review-table .vpn-flagged-row:hover {
+  background: var(--purple-50);
+}
+
+/* When both new-school and VPN-flagged, VPN wins (security concern) */
+.review-table .new-school-row.vpn-flagged-row,
+.review-table .new-school-row.vpn-flagged-row:hover {
+  background: var(--purple-50);
+}
+
 /* School column */
 .col-school {
   min-width: 160px;

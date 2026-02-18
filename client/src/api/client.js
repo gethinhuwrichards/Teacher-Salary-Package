@@ -54,7 +54,13 @@ export const api = {
     method: 'POST',
     body: JSON.stringify({ password }),
   }),
-  getAdminSubmissions: (status = 'pending') => request(`/admin/submissions?status=${status}`),
+  getAdminSubmissions: (status = 'pending', vpnFlagged) => {
+    let url = `/admin/submissions?status=${status}`;
+    if (vpnFlagged !== undefined) {
+      url += `&vpn_flagged=${vpnFlagged}`;
+    }
+    return request(url);
+  },
   reviewSubmission: (id, action) => request(`/admin/submissions/${id}`, {
     method: 'PATCH',
     body: JSON.stringify({ action }),

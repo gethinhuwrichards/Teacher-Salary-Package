@@ -21,6 +21,7 @@ app.get('/api/health', async (req, res) => {
     supabase_key: !!process.env.SUPABASE_SERVICE_KEY,
     exchange_key: !!process.env.EXCHANGE_RATE_API_KEY,
     admin_password: !!process.env.ADMIN_PASSWORD,
+    iphub_key: !!process.env.IPHUB_API_KEY,
   };
   try {
     const supabase = require('./db/supabase');

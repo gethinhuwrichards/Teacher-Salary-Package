@@ -8,6 +8,7 @@ import AdminLoginPage from './pages/AdminLoginPage';
 import AdminReviewPage from './pages/AdminReviewPage';
 import AdminArchivedPage from './pages/AdminArchivedPage';
 import AdminPastSubmissionsPage from './pages/AdminPastSubmissionsPage';
+import AdminMaliciousPage from './pages/AdminMaliciousPage';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/admin/review" element={<AdminReviewPage />} />
         <Route path="/admin/archived" element={<AdminArchivedPage />} />
         <Route path="/admin/past" element={<AdminPastSubmissionsPage />} />
+        <Route path="/admin/malicious" element={<AdminMaliciousPage />} />
       </Route>
     </Routes>
   );

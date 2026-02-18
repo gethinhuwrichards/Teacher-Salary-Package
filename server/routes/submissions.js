@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const supabase = require('../db/supabase');
 const { convertAmount } = require('../services/conversionService');
+const { checkVpn } = require('../services/iphubService');
 
 const VALID_POSITIONS = [
   'classroom_teacher',
@@ -133,7 +134,28 @@ router.post('/', async (req, res) => {
       .single();
 
     if (error) throw error;
+
+    // Respond immediately — don't make the user wait for VPN check
     res.status(201).json({ message: 'Submission received and pending review', id: data.id });
+
+    // Fire-and-forget: check IP against IPHub and flag if VPN
+    if (data.ip_address) {
+      checkVpn(data.ip_address).then(async (isVpn) => {
+        if (isVpn) {
+          const { error: updateError } = await supabase
+            .from('submissions')
+            .update({ vpn_flagged: true })
+            .eq('id', data.id);
+          if (updateError) {
+            console.error('Failed to flag VPN submission:', updateError.message);
+          } else {
+            console.log(`Submission ${data.id} flagged as VPN (IP: ${data.ip_address})`);
+          }
+        }
+      }).catch((err) => {
+        console.error('VPN check error:', err.message);
+      });
+    }
   } catch (err) {
     console.error('Error creating submission:', err);
     res.status(500).json({ error: err.message || 'Failed to submit' });

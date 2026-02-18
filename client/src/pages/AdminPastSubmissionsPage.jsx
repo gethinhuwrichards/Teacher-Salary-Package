@@ -139,6 +139,7 @@ export default function AdminPastSubmissionsPage() {
         <div className="admin-nav">
           <Link to="/admin/review" className="btn btn-primary btn-sm">Review Queue</Link>
           <Link to="/admin/archived" className="btn btn-secondary btn-sm">Archived</Link>
+          <Link to="/admin/malicious" className="btn btn-secondary btn-sm">Malicious IP</Link>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => {
@@ -255,7 +256,10 @@ export default function AdminPastSubmissionsPage() {
                   )}
                 </td>
                 <td className="cell-date">{new Date(sub.submitted_at).toLocaleDateString()}</td>
-                <td className="cell-ip">{sub.ip_address || '—'}</td>
+                <td className="cell-ip">
+                  {sub.vpn_flagged && <span className="vpn-badge">VPN</span>}
+                  {sub.ip_address || '—'}
+                </td>
               </tr>
             ))}
           </tbody>

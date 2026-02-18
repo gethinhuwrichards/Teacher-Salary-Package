@@ -39,6 +39,14 @@
   --red-600: #A52828;
   --red-700: #8B2020;
 
+  /* Purples — VPN flagged */
+  --purple-50: #f5f0ff;
+  --purple-100: #ede5ff;
+  --purple-200: #d4c4f7;
+  --purple-500: #7C3AED;
+  --purple-600: #6D28D9;
+  --purple-700: #5B21B6;
+
   /* Badge variants */
   --badge-teacher-bg: #FEF9F0;
   --badge-teacher-text: #8B6914;
@@ -207,6 +215,20 @@ h1, h2, h3 {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+/* VPN badge — global utility */
+.vpn-badge {
+  display: inline-block;
+  background: var(--purple-600);
+  color: var(--white);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+  margin-right: 0.35rem;
+  vertical-align: middle;
 }
 
 /* Card */
