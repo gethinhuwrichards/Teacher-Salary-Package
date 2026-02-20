@@ -267,6 +267,7 @@
 .flag-tor { background: var(--purple-600); }
 .flag-proxy { background: var(--purple-500); }
 .flag-abuser { background: var(--purple-700); }
+.flag-iphub { background: #d97706; }
 
 .ip-text {
   font-size: 0.75rem;
@@ -293,6 +294,21 @@
   border-color: var(--blue-400);
   color: var(--blue-600);
   background: var(--blue-50);
+}
+
+/* Amber outline button (IPHub) */
+.btn-outline-amber {
+  background: transparent;
+  border: 1px solid #d97706;
+  color: #d97706;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline-amber:hover {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #b45309;
 }
 
 /* IP Breakdown Modal */

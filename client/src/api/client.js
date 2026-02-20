@@ -85,5 +85,6 @@ export const api = {
     body: JSON.stringify({ ids, status }),
   }),
   ipLookup: (ip) => request(`/admin/ip-lookup/${encodeURIComponent(ip)}`),
+  iphubLookup: (ip) => request(`/admin/iphub-lookup/${encodeURIComponent(ip)}`),
   getVisitorIps: () => request('/admin/visitor-ips'),
 };

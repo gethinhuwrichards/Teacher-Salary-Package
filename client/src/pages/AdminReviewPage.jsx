@@ -29,6 +29,13 @@ export default function AdminReviewPage() {
   const [ipBreakdown, setIpBreakdown] = useState(null);
   const [ipBreakdownLoading, setIpBreakdownLoading] = useState(false);
 
+  // IPHub modal state
+  const [iphubResult, setIphubResult] = useState(null);
+  const [iphubLoading, setIphubLoading] = useState(false);
+
+  // Track IPs flagged by IPHub on-demand (for row highlighting)
+  const [iphubFlagged, setIphubFlagged] = useState(new Set());
+
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (!token) {
@@ -121,6 +128,23 @@ export default function AdminReviewPage() {
     }
   }
 
+  async function handleIphubCheck(ip) {
+    if (!ip) return;
+    setIphubLoading(true);
+    try {
+      const data = await api.iphubLookup(ip);
+      setIphubResult(data);
+      // If IPHub flags as VPN/proxy (block === 1), add to highlighted set
+      if (data.block === 1) {
+        setIphubFlagged(prev => new Set(prev).add(ip));
+      }
+    } catch (err) {
+      alert(`IPHub lookup failed: ${err.message}`);
+    } finally {
+      setIphubLoading(false);
+    }
+  }
+
   function formatAccommodation(sub) {
     if (sub.accommodation_type === 'allowance') {
       return `Allowance: ${formatCurrency(sub[`accommodation_${field}`], currency)}`;
@@ -194,7 +218,7 @@ export default function AdminReviewPage() {
                 return (
                   <tr key={sub.id} className={[
                     isNewSchool ? 'new-school-row' : '',
-                    sub.vpn_flagged ? 'vpn-flagged-row' : '',
+                    (sub.vpn_flagged || iphubFlagged.has(sub.ip_address)) ? 'vpn-flagged-row' : '',
                   ].filter(Boolean).join(' ')}>
                     <td className="col-school">
                       {editingId === sub.id ? (
@@ -272,6 +296,7 @@ export default function AdminReviewPage() {
                         {sub.ip_is_tor && <span className="ip-flag-badge flag-tor">TOR</span>}
                         {sub.ip_is_proxy && <span className="ip-flag-badge flag-proxy">PROXY</span>}
                         {sub.ip_is_abuser && <span className="ip-flag-badge flag-abuser">ABUSER</span>}
+                        {iphubFlagged.has(sub.ip_address) && <span className="ip-flag-badge flag-iphub">IPHUB</span>}
                       </div>
                       <span className="ip-text">{sub.ip_address || '—'}</span>
                       {sub.ip_country && <span className="ip-country">{sub.ip_country}</span>}
@@ -292,12 +317,20 @@ export default function AdminReviewPage() {
                         {isActioning === 'deny' ? '...' : 'Deny'}
                       </button>
                       {sub.ip_address && (
-                        <button
-                          className="btn btn-outline btn-xs"
-                          onClick={() => handleIpBreakdown(sub.ip_address)}
-                        >
-                          IP Info
-                        </button>
+                        <>
+                          <button
+                            className="btn btn-outline btn-xs"
+                            onClick={() => handleIpBreakdown(sub.ip_address)}
+                          >
+                            IP Info
+                          </button>
+                          <button
+                            className="btn btn-outline-amber btn-xs"
+                            onClick={() => handleIphubCheck(sub.ip_address)}
+                          >
+                            IPHub
+                          </button>
+                        </>
                       )}
                       {isNewSchool && (
                         <button
@@ -437,6 +470,52 @@ export default function AdminReviewPage() {
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* IPHub Modal */}
+      {(iphubResult || iphubLoading) && (
+        <div className="ip-modal-overlay" onClick={() => { setIphubResult(null); setIphubLoading(false); }}>
+          <div className="ip-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ip-modal-header">
+              <h2>IPHub Check {iphubResult?.ip ? `— ${iphubResult.ip}` : ''}</h2>
+              <button className="ip-modal-close" onClick={() => { setIphubResult(null); setIphubLoading(false); }}>&times;</button>
+            </div>
+            {iphubLoading ? (
+              <div className="ip-modal-loading">Checking IPHub...</div>
+            ) : iphubResult && (
+              <div className="ip-modal-body">
+                <div className="ip-detail-section">
+                  <h3>Verdict</h3>
+                  <div className="ip-detail-grid">
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Block Status</span>
+                      <span className={`ip-detail-value ${iphubResult.block === 1 ? 'flag-yes' : 'flag-no'}`}>
+                        {iphubResult.block === 0 ? 'Residential (clean)' : iphubResult.block === 1 ? 'VPN / Proxy / Datacenter' : 'Undetermined'}
+                      </span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Country</span>
+                      <span className="ip-detail-value">{iphubResult.countryName || '—'} ({iphubResult.countryCode || '—'})</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="ip-detail-section">
+                  <h3>Network</h3>
+                  <div className="ip-detail-grid">
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">ISP</span>
+                      <span className="ip-detail-value">{iphubResult.isp || '—'}</span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">ASN</span>
+                      <span className="ip-detail-value">{iphubResult.asn || '—'}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

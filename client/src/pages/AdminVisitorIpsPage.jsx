@@ -13,6 +13,10 @@ export default function AdminVisitorIpsPage() {
   const [ipBreakdown, setIpBreakdown] = useState(null);
   const [ipBreakdownLoading, setIpBreakdownLoading] = useState(false);
 
+  // IPHub modal state
+  const [iphubResult, setIphubResult] = useState(null);
+  const [iphubLoading, setIphubLoading] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (!token) {
@@ -47,6 +51,19 @@ export default function AdminVisitorIpsPage() {
       alert(`IP lookup failed: ${err.message}`);
     } finally {
       setIpBreakdownLoading(false);
+    }
+  }
+
+  async function handleIphubCheck(ip) {
+    if (!ip) return;
+    setIphubLoading(true);
+    try {
+      const data = await api.iphubLookup(ip);
+      setIphubResult(data);
+    } catch (err) {
+      alert(`IPHub lookup failed: ${err.message}`);
+    } finally {
+      setIphubLoading(false);
     }
   }
 
@@ -98,12 +115,18 @@ export default function AdminVisitorIpsPage() {
                   <td className="cell-date">{new Date(v.first_seen).toLocaleString()}</td>
                   <td className="cell-date">{new Date(v.last_seen).toLocaleString()}</td>
                   <td className="cell-visits">{v.visit_count}</td>
-                  <td>
+                  <td className="col-actions">
                     <button
                       className="btn btn-outline btn-xs"
                       onClick={() => handleIpLookup(v.ip_address)}
                     >
                       Lookup
+                    </button>
+                    <button
+                      className="btn btn-outline-amber btn-xs"
+                      onClick={() => handleIphubCheck(v.ip_address)}
+                    >
+                      IPHub
                     </button>
                   </td>
                 </tr>
@@ -234,6 +257,51 @@ export default function AdminVisitorIpsPage() {
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {/* IPHub Modal */}
+      {(iphubResult || iphubLoading) && (
+        <div className="ip-modal-overlay" onClick={() => { setIphubResult(null); setIphubLoading(false); }}>
+          <div className="ip-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ip-modal-header">
+              <h2>IPHub Check {iphubResult?.ip ? `— ${iphubResult.ip}` : ''}</h2>
+              <button className="ip-modal-close" onClick={() => { setIphubResult(null); setIphubLoading(false); }}>&times;</button>
+            </div>
+            {iphubLoading ? (
+              <div className="ip-modal-loading">Checking IPHub...</div>
+            ) : iphubResult && (
+              <div className="ip-modal-body">
+                <div className="ip-detail-section">
+                  <h3>Verdict</h3>
+                  <div className="ip-detail-grid">
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Block Status</span>
+                      <span className={`ip-detail-value ${iphubResult.block === 1 ? 'flag-yes' : 'flag-no'}`}>
+                        {iphubResult.block === 0 ? 'Residential (clean)' : iphubResult.block === 1 ? 'VPN / Proxy / Datacenter' : 'Undetermined'}
+                      </span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Country</span>
+                      <span className="ip-detail-value">{iphubResult.countryName || '—'} ({iphubResult.countryCode || '—'})</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="ip-detail-section">
+                  <h3>Network</h3>
+                  <div className="ip-detail-grid">
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">ISP</span>
+                      <span className="ip-detail-value">{iphubResult.isp || '—'}</span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">ASN</span>
+                      <span className="ip-detail-value">{iphubResult.asn || '—'}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

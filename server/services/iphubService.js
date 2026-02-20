@@ -28,4 +28,28 @@ async function checkVpn(ipAddress) {
   }
 }
 
-module.exports = { checkVpn };
+/**
+ * Full IPHub lookup — returns the raw API response for on-demand checks.
+ * Returns { ip, countryCode, countryName, asn, isp, block } or null on error.
+ */
+async function lookupIphub(ipAddress) {
+  if (!IPHUB_API_KEY || !ipAddress) return null;
+
+  try {
+    const res = await fetch(`${IPHUB_BASE}/${ipAddress}`, {
+      headers: { 'X-Key': IPHUB_API_KEY },
+    });
+
+    if (!res.ok) {
+      console.error(`IPHub lookup error: ${res.status}`);
+      return null;
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error('IPHub lookup failed:', err.message);
+    return null;
+  }
+}
+
+module.exports = { checkVpn, lookupIphub };

@@ -206,3 +206,29 @@
   color: var(--blue-600);
   background: var(--blue-50);
 }
+
+.admin-visitors .btn-outline-amber {
+  background: transparent;
+  border: 1px solid #d97706;
+  color: #d97706;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-visitors .btn-outline-amber:hover {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #b45309;
+}
+
+.admin-visitors .col-actions {
+  white-space: nowrap;
+}
+
+.admin-visitors .col-actions .btn {
+  margin-right: 0.25rem;
+}
+
+.admin-visitors .col-actions .btn:last-child {
+  margin-right: 0;
+}

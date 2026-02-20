@@ -5,6 +5,7 @@ const supabase = require('../db/supabase');
 const adminAuth = require('../middleware/adminAuth');
 const { normalizeQuery } = require('../services/searchService');
 const { lookupIp } = require('../services/ipapiService');
+const { lookupIphub } = require('../services/iphubService');
 
 function toTitleCase(str) {
   return str
@@ -298,6 +299,26 @@ router.get('/ip-lookup/:ip', adminAuth, async (req, res) => {
   } catch (err) {
     console.error('Error looking up IP:', err);
     res.status(500).json({ error: 'IP lookup failed' });
+  }
+});
+
+// GET /api/admin/iphub-lookup/:ip — on-demand IPHub check
+router.get('/iphub-lookup/:ip', adminAuth, async (req, res) => {
+  try {
+    const { ip } = req.params;
+    if (!ip) {
+      return res.status(400).json({ error: 'IP address required' });
+    }
+
+    const data = await lookupIphub(ip);
+    if (!data) {
+      return res.status(502).json({ error: 'Failed to lookup IP via IPHub' });
+    }
+
+    res.json(data);
+  } catch (err) {
+    console.error('Error looking up IP via IPHub:', err);
+    res.status(500).json({ error: 'IPHub lookup failed' });
   }
 });
 
