@@ -7,12 +7,16 @@ const countriesRoutes = require('./routes/countries');
 const submissionsRoutes = require('./routes/submissions');
 const adminRoutes = require('./routes/admin');
 const currencyRoutes = require('./routes/currency');
+const trackVisitorIp = require('./middleware/trackVisitorIp');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// Track all visitor IPs
+app.use(trackVisitorIp);
 
 // Health check
 app.get('/api/health', async (req, res) => {
@@ -21,7 +25,7 @@ app.get('/api/health', async (req, res) => {
     supabase_key: !!process.env.SUPABASE_SERVICE_KEY,
     exchange_key: !!process.env.EXCHANGE_RATE_API_KEY,
     admin_password: !!process.env.ADMIN_PASSWORD,
-    iphub_key: !!process.env.IPHUB_API_KEY,
+    ipapi_key: !!process.env.IPAPI_API_KEY,
   };
   try {
     const supabase = require('./db/supabase');

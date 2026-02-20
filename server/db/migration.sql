@@ -68,7 +68,13 @@ CREATE TABLE submissions (
   submitted_at TIMESTAMPTZ DEFAULT now(),
   reviewed_at TIMESTAMPTZ,
   exchange_rate_date DATE,
-  ip_address TEXT
+  ip_address TEXT,
+  vpn_flagged BOOLEAN DEFAULT false,
+  ip_is_vpn BOOLEAN DEFAULT false,
+  ip_is_tor BOOLEAN DEFAULT false,
+  ip_is_proxy BOOLEAN DEFAULT false,
+  ip_is_abuser BOOLEAN DEFAULT false,
+  ip_country TEXT
 );
 
 CREATE INDEX idx_submissions_school ON submissions(school_id);
@@ -82,6 +88,30 @@ CREATE TABLE exchange_rates (
   rates JSONB NOT NULL,
   UNIQUE(base_currency, rate_date)
 );
+
+-- Visitor IPs tracking
+CREATE TABLE visitor_ips (
+  id SERIAL PRIMARY KEY,
+  ip_address TEXT UNIQUE NOT NULL,
+  first_seen TIMESTAMPTZ DEFAULT now(),
+  last_seen TIMESTAMPTZ DEFAULT now(),
+  visit_count INT DEFAULT 1
+);
+
+CREATE INDEX idx_visitor_ips_last_seen ON visitor_ips(last_seen DESC);
+
+-- Function to upsert visitor IP (insert or increment visit_count)
+CREATE OR REPLACE FUNCTION upsert_visitor_ip(p_ip TEXT)
+RETURNS VOID AS $$
+BEGIN
+  INSERT INTO visitor_ips (ip_address, first_seen, last_seen, visit_count)
+  VALUES (p_ip, now(), now(), 1)
+  ON CONFLICT (ip_address)
+  DO UPDATE SET
+    last_seen = now(),
+    visit_count = visitor_ips.visit_count + 1;
+END;
+$$ LANGUAGE plpgsql;
 
 -- Admin sessions
 CREATE TABLE admin_sessions (

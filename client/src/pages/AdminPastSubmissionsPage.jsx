@@ -140,6 +140,7 @@ export default function AdminPastSubmissionsPage() {
           <Link to="/admin/review" className="btn btn-primary btn-sm">Review Queue</Link>
           <Link to="/admin/archived" className="btn btn-secondary btn-sm">Archived</Link>
           <Link to="/admin/malicious" className="btn btn-secondary btn-sm">Malicious IP</Link>
+          <Link to="/admin/visitor-ips" className="btn btn-secondary btn-sm">Visitor IPs</Link>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => {

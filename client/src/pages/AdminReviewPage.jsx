@@ -25,6 +25,10 @@ export default function AdminReviewPage() {
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState('');
 
+  // IP breakdown modal state
+  const [ipBreakdown, setIpBreakdown] = useState(null);
+  const [ipBreakdownLoading, setIpBreakdownLoading] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (!token) {
@@ -104,6 +108,19 @@ export default function AdminReviewPage() {
     }
   }
 
+  async function handleIpBreakdown(ip) {
+    if (!ip) return;
+    setIpBreakdownLoading(true);
+    try {
+      const data = await api.ipLookup(ip);
+      setIpBreakdown(data);
+    } catch (err) {
+      alert(`IP lookup failed: ${err.message}`);
+    } finally {
+      setIpBreakdownLoading(false);
+    }
+  }
+
   function formatAccommodation(sub) {
     if (sub.accommodation_type === 'allowance') {
       return `Allowance: ${formatCurrency(sub[`accommodation_${field}`], currency)}`;
@@ -132,6 +149,7 @@ export default function AdminReviewPage() {
           <Link to="/admin/past" className="btn btn-secondary btn-sm">Accepted Submissions</Link>
           <Link to="/admin/archived" className="btn btn-secondary btn-sm">Archived</Link>
           <Link to="/admin/malicious" className="btn btn-secondary btn-sm">Malicious IP</Link>
+          <Link to="/admin/visitor-ips" className="btn btn-secondary btn-sm">Visitor IPs</Link>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => {
@@ -249,8 +267,14 @@ export default function AdminReviewPage() {
                     <td className="col-benefits">{formatBenefits(sub)}</td>
                     <td className="col-date">{new Date(sub.submitted_at).toLocaleDateString()}</td>
                     <td className="col-ip">
-                      {sub.vpn_flagged && <span className="vpn-badge">VPN</span>}
-                      {sub.ip_address || '—'}
+                      <div className="ip-flags">
+                        {sub.ip_is_vpn && <span className="ip-flag-badge flag-vpn">VPN</span>}
+                        {sub.ip_is_tor && <span className="ip-flag-badge flag-tor">TOR</span>}
+                        {sub.ip_is_proxy && <span className="ip-flag-badge flag-proxy">PROXY</span>}
+                        {sub.ip_is_abuser && <span className="ip-flag-badge flag-abuser">ABUSER</span>}
+                      </div>
+                      <span className="ip-text">{sub.ip_address || '—'}</span>
+                      {sub.ip_country && <span className="ip-country">{sub.ip_country}</span>}
                     </td>
                     <td className="col-actions">
                       <button
@@ -267,6 +291,14 @@ export default function AdminReviewPage() {
                       >
                         {isActioning === 'deny' ? '...' : 'Deny'}
                       </button>
+                      {sub.ip_address && (
+                        <button
+                          className="btn btn-outline btn-xs"
+                          onClick={() => handleIpBreakdown(sub.ip_address)}
+                        >
+                          IP Info
+                        </button>
+                      )}
                       {isNewSchool && (
                         <button
                           className="btn btn-secondary btn-xs"
@@ -281,6 +313,133 @@ export default function AdminReviewPage() {
               })}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* IP Breakdown Modal */}
+      {(ipBreakdown || ipBreakdownLoading) && (
+        <div className="ip-modal-overlay" onClick={() => { setIpBreakdown(null); setIpBreakdownLoading(false); }}>
+          <div className="ip-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ip-modal-header">
+              <h2>IP Breakdown {ipBreakdown?.ip ? `— ${ipBreakdown.ip}` : ''}</h2>
+              <button className="ip-modal-close" onClick={() => { setIpBreakdown(null); setIpBreakdownLoading(false); }}>&times;</button>
+            </div>
+            {ipBreakdownLoading ? (
+              <div className="ip-modal-loading">Looking up IP...</div>
+            ) : ipBreakdown && (
+              <div className="ip-modal-body">
+                <div className="ip-detail-section">
+                  <h3>Flags</h3>
+                  <div className="ip-detail-grid">
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">VPN</span>
+                      <span className={`ip-detail-value ${ipBreakdown.is_vpn ? 'flag-yes' : 'flag-no'}`}>{ipBreakdown.is_vpn ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Tor</span>
+                      <span className={`ip-detail-value ${ipBreakdown.is_tor ? 'flag-yes' : 'flag-no'}`}>{ipBreakdown.is_tor ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Proxy</span>
+                      <span className={`ip-detail-value ${ipBreakdown.is_proxy ? 'flag-yes' : 'flag-no'}`}>{ipBreakdown.is_proxy ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Abuser</span>
+                      <span className={`ip-detail-value ${ipBreakdown.is_abuser ? 'flag-yes' : 'flag-no'}`}>{ipBreakdown.is_abuser ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Datacenter</span>
+                      <span className={`ip-detail-value ${ipBreakdown.is_datacenter ? 'flag-yes' : 'flag-no'}`}>{ipBreakdown.is_datacenter ? 'Yes' : 'No'}</span>
+                    </div>
+                    <div className="ip-detail-item">
+                      <span className="ip-detail-label">Mobile</span>
+                      <span className="ip-detail-value">{ipBreakdown.is_mobile ? 'Yes' : 'No'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {ipBreakdown.location && (
+                  <div className="ip-detail-section">
+                    <h3>Location</h3>
+                    <div className="ip-detail-grid">
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Country</span>
+                        <span className="ip-detail-value">{ipBreakdown.location.country} ({ipBreakdown.location.country_code})</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">City / State</span>
+                        <span className="ip-detail-value">{[ipBreakdown.location.city, ipBreakdown.location.state].filter(Boolean).join(', ') || '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Latitude</span>
+                        <span className="ip-detail-value">{ipBreakdown.location.latitude ?? '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Longitude</span>
+                        <span className="ip-detail-value">{ipBreakdown.location.longitude ?? '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Timezone</span>
+                        <span className="ip-detail-value">{ipBreakdown.location.timezone || '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Local Time</span>
+                        <span className="ip-detail-value">{ipBreakdown.location.local_time ? new Date(ipBreakdown.location.local_time).toLocaleString() : '—'}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {ipBreakdown.company && (
+                  <div className="ip-detail-section">
+                    <h3>Company / Network</h3>
+                    <div className="ip-detail-grid">
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Name</span>
+                        <span className="ip-detail-value">{ipBreakdown.company.name || '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Domain</span>
+                        <span className="ip-detail-value">{ipBreakdown.company.domain || '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Type</span>
+                        <span className="ip-detail-value">{ipBreakdown.company.type || '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Abuser Score</span>
+                        <span className="ip-detail-value">{ipBreakdown.company.abuser_score || '—'}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {ipBreakdown.asn && (
+                  <div className="ip-detail-section">
+                    <h3>ASN</h3>
+                    <div className="ip-detail-grid">
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">ASN</span>
+                        <span className="ip-detail-value">{ipBreakdown.asn.asn || '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Org</span>
+                        <span className="ip-detail-value">{ipBreakdown.asn.org || ipBreakdown.asn.descr || '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">Route</span>
+                        <span className="ip-detail-value">{ipBreakdown.asn.route || '—'}</span>
+                      </div>
+                      <div className="ip-detail-item">
+                        <span className="ip-detail-label">ASN Abuser Score</span>
+                        <span className="ip-detail-value">{ipBreakdown.asn.abuser_score || '—'}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

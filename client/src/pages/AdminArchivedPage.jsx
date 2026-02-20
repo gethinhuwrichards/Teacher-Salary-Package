@@ -63,6 +63,7 @@ export default function AdminArchivedPage() {
           <Link to="/admin/review" className="btn btn-primary btn-sm">Review Queue</Link>
           <Link to="/admin/past" className="btn btn-secondary btn-sm">Accepted Submissions</Link>
           <Link to="/admin/malicious" className="btn btn-secondary btn-sm">Malicious IP</Link>
+          <Link to="/admin/visitor-ips" className="btn btn-secondary btn-sm">Visitor IPs</Link>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => {

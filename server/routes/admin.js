@@ -4,6 +4,7 @@ const router = express.Router();
 const supabase = require('../db/supabase');
 const adminAuth = require('../middleware/adminAuth');
 const { normalizeQuery } = require('../services/searchService');
+const { lookupIp } = require('../services/ipapiService');
 
 function toTitleCase(str) {
   return str
@@ -277,6 +278,42 @@ router.patch('/submissions/:id/match-school', adminAuth, async (req, res) => {
   } catch (err) {
     console.error('Error matching school:', err);
     res.status(500).json({ error: 'Failed to match school' });
+  }
+});
+
+// GET /api/admin/ip-lookup/:ip — on-demand full IP lookup via ipapi.is
+router.get('/ip-lookup/:ip', adminAuth, async (req, res) => {
+  try {
+    const { ip } = req.params;
+    if (!ip) {
+      return res.status(400).json({ error: 'IP address required' });
+    }
+
+    const data = await lookupIp(ip);
+    if (!data) {
+      return res.status(502).json({ error: 'Failed to lookup IP' });
+    }
+
+    res.json(data);
+  } catch (err) {
+    console.error('Error looking up IP:', err);
+    res.status(500).json({ error: 'IP lookup failed' });
+  }
+});
+
+// GET /api/admin/visitor-ips — list all recorded visitor IPs
+router.get('/visitor-ips', adminAuth, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('visitor_ips')
+      .select('*')
+      .order('last_seen', { ascending: false });
+
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    console.error('Error fetching visitor IPs:', err);
+    res.status(500).json({ error: 'Failed to fetch visitor IPs' });
   }
 });
 

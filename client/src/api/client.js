@@ -84,4 +84,6 @@ export const api = {
     method: 'PATCH',
     body: JSON.stringify({ ids, status }),
   }),
+  ipLookup: (ip) => request(`/admin/ip-lookup/${encodeURIComponent(ip)}`),
+  getVisitorIps: () => request('/admin/visitor-ips'),
 };

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const supabase = require('../db/supabase');
 const { convertAmount } = require('../services/conversionService');
-const { checkVpn } = require('../services/iphubService');
+const { checkIp } = require('../services/ipapiService');
 
 const VALID_POSITIONS = [
   'classroom_teacher',
@@ -106,14 +106,19 @@ router.post('/', async (req, res) => {
       vpn_flagged: false,
     };
 
-    // Check IP against IPHub before insert
+    // Check IP against ipapi.is before insert
     if (submission.ip_address) {
       try {
-        const isVpn = await checkVpn(submission.ip_address);
-        console.log(`IPHub check for ${submission.ip_address}: ${isVpn ? 'VPN DETECTED' : 'clean'}`);
-        submission.vpn_flagged = isVpn;
-      } catch (vpnErr) {
-        console.error('VPN check error (non-blocking):', vpnErr.message);
+        const ipResult = await checkIp(submission.ip_address);
+        console.log(`ipapi.is check for ${submission.ip_address}: ${ipResult.flagged ? 'FLAGGED' : 'clean'}`);
+        submission.vpn_flagged = ipResult.flagged;
+        submission.ip_is_vpn = ipResult.is_vpn;
+        submission.ip_is_tor = ipResult.is_tor;
+        submission.ip_is_proxy = ipResult.is_proxy;
+        submission.ip_is_abuser = ipResult.is_abuser;
+        submission.ip_country = ipResult.ip_country;
+      } catch (ipErr) {
+        console.error('IP check error (non-blocking):', ipErr.message);
       }
     }
 

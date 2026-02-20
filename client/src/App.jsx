@@ -9,6 +9,7 @@ import AdminReviewPage from './pages/AdminReviewPage';
 import AdminArchivedPage from './pages/AdminArchivedPage';
 import AdminPastSubmissionsPage from './pages/AdminPastSubmissionsPage';
 import AdminMaliciousPage from './pages/AdminMaliciousPage';
+import AdminVisitorIpsPage from './pages/AdminVisitorIpsPage';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/admin/archived" element={<AdminArchivedPage />} />
         <Route path="/admin/past" element={<AdminPastSubmissionsPage />} />
         <Route path="/admin/malicious" element={<AdminMaliciousPage />} />
+        <Route path="/admin/visitor-ips" element={<AdminVisitorIpsPage />} />
       </Route>
     </Routes>
   );
