@@ -17,10 +17,10 @@
 
 .country-heading {
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--gray-400);
+  color: var(--gray-700);
   margin: 0 0 0.5rem;
   padding-bottom: 0.4rem;
   border-bottom: 1px solid var(--gray-200);
@@ -56,11 +56,27 @@
   color: var(--gray-900);
 }
 
-.school-bar-country {
-  font-size: 0.8rem;
-  color: var(--gray-400);
+.school-bar-salary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
   flex-shrink: 0;
   margin-left: 1rem;
+  white-space: nowrap;
+}
+
+.salary-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.salary-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-700);
 }
 
 .loading {

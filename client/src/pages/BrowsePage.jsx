@@ -2,9 +2,14 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api/client';
 import { normalizeQuery } from '../utils/normalize';
+import { useCurrency } from '../context/CurrencyContext';
+import { formatCurrency, getCurrencyField } from '../utils/formatCurrency';
 import './BrowsePage.css';
 
 export default function BrowsePage() {
+  const { currency } = useCurrency();
+  const field = getCurrencyField(currency);
+
   const [allSchools, setAllSchools] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -79,7 +84,12 @@ export default function BrowsePage() {
             {schools.map((school) => (
               <Link key={school.id} to={`/school/${school.id}`} className="school-bar">
                 <span className="school-bar-name">{school.name}</span>
-                <span className="school-bar-country">{country}</span>
+                {school.averages && (
+                  <span className="school-bar-salary">
+                    <span className="salary-label">avg submitted salary</span>
+                    <span className="salary-value">~{formatCurrency(Math.round(school.averages[field] / 1000) * 1000, currency)}</span>
+                  </span>
+                )}
               </Link>
             ))}
           </div>
